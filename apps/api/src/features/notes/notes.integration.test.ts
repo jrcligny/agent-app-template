@@ -30,7 +30,7 @@ describe("notes and sessions", () => {
     });
   });
 
-  it("AUTH-3 sets an HttpOnly session cookie and rejects an untrusted origin", async () => {
+  it("AUTH-3 sets an HttpOnly session cookie and rejects an untrusted or missing origin", async () => {
     await withApp(async ({ app }) => {
       const account = await signUp(app, {
         email: uniqueEmail("cookie"),
@@ -47,6 +47,13 @@ describe("notes and sessions", () => {
         body: JSON.stringify({ email: uniqueEmail("evil"), password, name: "Evil" }),
       });
       expect(rejected.status).toBeGreaterThanOrEqual(400);
+
+      const missingOrigin = await app.request("/api/notes", {
+        method: "POST",
+        headers: { cookie: account.cookie, "content-type": "application/json" },
+        body: JSON.stringify({ title: "No origin", body: "blocked" }),
+      });
+      expect(missingOrigin.status).toBe(403);
     });
   });
 

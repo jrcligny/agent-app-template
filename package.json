@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "pnpm --filter @agent-app/contracts build && pnpm --parallel --filter @agent-app/api --filter @agent-app/web dev",
     "build": "pnpm --filter @agent-app/contracts build && pnpm -r --filter !@agent-app/contracts --if-present run build",
-    "typecheck": "pnpm -r --if-present run typecheck",
+    "typecheck": "pnpm --filter @agent-app/contracts build && pnpm -r --filter !@agent-app/contracts --if-present run typecheck",
     "lint": "eslint .",
     "test": "pnpm --filter @agent-app/contracts build && pnpm -r --filter !@agent-app/e2e --if-present run test && node --test scripts/*.test.mjs",
     "test:e2e": "pnpm --filter @agent-app/contracts build && pnpm --filter @agent-app/web build && pnpm --filter @agent-app/e2e test",

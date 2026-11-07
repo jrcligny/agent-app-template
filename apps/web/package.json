@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && storybook build",
+    "pretypecheck": "pnpm --filter @agent-app/contracts build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "pretest": "pnpm --filter @agent-app/contracts build",
     "test": "vitest run"

@@ -25,7 +25,7 @@ The account summary SHALL include only id, email, and name.
 Trace: apps/api/src/features/notes/notes.integration.test.ts :: "AUTH-2 returns the account summary without a password or token"
 
 ### Requirement: AUTH-3 Session cookie is HttpOnly and host-bound
-The session cookie SHALL be HttpOnly, SHALL NOT use SameSite=None, and SHALL NOT be issued for an untrusted origin.
+The session cookie SHALL be HttpOnly, SHALL NOT use SameSite=None, and SHALL NOT be issued for an untrusted origin. A state-changing request that sends a session cookie SHALL include a trusted Origin.
 
 #### Scenario: Sign-up cookie
 - **WHEN** a client signs up from a trusted origin
@@ -36,7 +36,11 @@ The session cookie SHALL be HttpOnly, SHALL NOT use SameSite=None, and SHALL NOT
 - **WHEN** a client attempts sign-up with an origin that is not trusted
 - **THEN** the response is not successful
 
-Trace: apps/api/src/features/notes/notes.integration.test.ts :: "AUTH-3 sets an HttpOnly session cookie and rejects an untrusted origin"
+#### Scenario: Cookie without origin
+- **WHEN** a signed-in client sends a state-changing note request with a session cookie and no Origin
+- **THEN** the response status is 403
+
+Trace: apps/api/src/features/notes/notes.integration.test.ts :: "AUTH-3 sets an HttpOnly session cookie and rejects an untrusted or missing origin"
 
 ### Requirement: AUTH-4 Sign-out ends access
 After sign-out, the API SHALL reject note requests that reuse the previous session cookie.

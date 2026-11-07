@@ -16,6 +16,10 @@ export function createApp(deps: { db: Db; auth: Auth; trustedOrigins: readonly s
       return;
     }
     const origin = c.req.header("origin");
+    const hasSessionCookie = Boolean(c.req.header("cookie"));
+    if (hasSessionCookie && !origin) {
+      return errorJson(c, 403, "forbidden", "Origin is required");
+    }
     if (origin && !deps.trustedOrigins.includes(origin)) {
       return errorJson(c, 403, "forbidden", "Origin is not allowed");
     }
