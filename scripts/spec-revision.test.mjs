@@ -39,7 +39,7 @@ test("an approved record is invalidated when the spec changes", () => {
   const revision = hashChangeSpecs(dir);
   writeFileSync(
     path.join(dir, ".openspec.yaml"),
-    `schema: spec-driven\nx-human-approval: approved\nx-approved-revision: ${revision}\nx-approved-commit: ${"a".repeat(40)}\nx-ui: true\n`,
+    `schema: spec-driven\nx-human-approval: approved\nx-spec-revision: ${revision}\nx-approved-revision: ${revision}\nx-approved-commit: ${"a".repeat(40)}\nx-ui: true\n`,
   );
   assert.equal(reviewChange(dir).problems.length, 0);
   assert.equal(reviewChange(dir).provesHumanApproval, false);

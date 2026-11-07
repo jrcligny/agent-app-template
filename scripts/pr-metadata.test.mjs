@@ -4,7 +4,7 @@ import { BOOTSTRAP_SENTENCE, evaluatePrBody } from "./check-pr-metadata.mjs";
 
 const implementation = `Review type: implementation
 Lenses: security, architecture, spec, ui
-Approved spec commit: ${"abc".repeat(13).slice(0, 40)}
+Approved spec commit: ${"a".repeat(40)}
 Author approval: none
 `;
 

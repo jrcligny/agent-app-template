@@ -9,6 +9,9 @@ import { logError, logInfo } from "./logger.js";
 
 const env = parseEnv(process.env);
 const pool = new Pool({ connectionString: env.databaseUrl, max: 10 });
+pool.on("error", (error: Error) => {
+  logError("database pool error", { name: error.name });
+});
 const db = drizzle(pool, { schema });
 const auth = createAuth(db, env);
 const app = createApp({ db, auth, trustedOrigins: env.trustedOrigins });

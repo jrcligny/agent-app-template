@@ -21,6 +21,6 @@ test("flags a web import of the API and accepts a local component import", () =>
   writeFileSync(path.join(repo, "apps/web/src/cn.ts"), "export function cn() { return \"\"; }\n");
   const findings = checkRepository(repo);
   assert.ok(findings.some((finding) => finding.includes("cannot import server code")));
-  assert.ok(findings.some((finding) => finding.includes("AUTH_SECRET")));
+  assert.ok(findings.some((finding) => finding.includes("server secrets")));
   assert.equal(findings.some((finding) => finding.includes("ok.ts")), false);
 });
