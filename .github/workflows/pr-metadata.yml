@@ -1,0 +1,29 @@
+name: PR metadata
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Fetch base branch
+        run: git fetch origin ${{ github.base_ref }} --depth=1
+      - name: Check pull request text shape
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if git ls-tree -r --name-only FETCH_HEAD -- openspec/specs | grep -q .
+          then
+            export BASE_HAS_IMPLEMENTED_SPECS=true
+          else
+            export BASE_HAS_IMPLEMENTED_SPECS=false
+          fi
+          node scripts/check-pr-metadata.mjs

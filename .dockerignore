@@ -1,0 +1,16 @@
+.git
+node_modules
+**/node_modules
+**/dist
+**/.vitepress/cache
+**/.vitepress/dist
+storybook-static
+test-results
+playwright-report
+e2e/screenshots
+apps/docs/generated
+coverage
+*.log
+.env
+.env.*
+!.env.example

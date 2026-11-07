@@ -1,0 +1,9 @@
+# Example values for `helm template` only. Not a deployment and not real credentials.
+database:
+  existingSecret: app-existing-secret
+api:
+  env:
+    betterAuthUrl: https://app.example.com
+    trustedOrigins: https://app.example.com
+ingress:
+  host: app.example.com
