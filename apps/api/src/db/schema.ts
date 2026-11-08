@@ -72,6 +72,7 @@ export const recordPermission = pgTable("record_permission", {
     .references(() => user.id, { onDelete: "cascade" }),
   canView: boolean("can_view").notNull(),
   canDelete: boolean("can_delete").notNull(),
+  canCurate: boolean("can_curate").notNull().default(true),
 });
 
 export const record = pgTable(
@@ -150,6 +151,79 @@ export const observation = pgTable(
     index("observation_user_observed_idx").on(table.userId, table.observedAt),
     index("observation_user_fixture_idx").on(table.userId, table.fixtureKey),
   ],
+);
+
+export const tag = pgTable(
+  "tag",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+  },
+  (table) => [index("tag_user_name_idx").on(table.userId, table.name)],
+);
+
+export const recordTag = pgTable(
+  "record_tag",
+  {
+    recordId: uuid("record_id")
+      .notNull()
+      .references(() => record.id, { onDelete: "cascade" }),
+    tagId: uuid("tag_id")
+      .notNull()
+      .references(() => tag.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+  },
+  (table) => [index("record_tag_record_idx").on(table.recordId)],
+);
+
+export const collection = pgTable(
+  "collection",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    ...timestamps,
+  },
+  (table) => [index("collection_user_idx").on(table.userId)],
+);
+
+export const membership = pgTable(
+  "membership",
+  {
+    collectionId: uuid("collection_id")
+      .notNull()
+      .references(() => collection.id, { onDelete: "cascade" }),
+    recordId: uuid("record_id")
+      .notNull()
+      .references(() => record.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    rationale: text("rationale"),
+    ...timestamps,
+  },
+  (table) => [index("membership_collection_idx").on(table.collectionId)],
+);
+
+export const savedView = pgTable(
+  "saved_view",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    query: text("query").notNull(),
+    ...timestamps,
+  },
+  (table) => [index("saved_view_user_idx").on(table.userId)],
 );
 
 export const note = pgTable(

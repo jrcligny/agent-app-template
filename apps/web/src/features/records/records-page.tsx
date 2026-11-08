@@ -1,6 +1,7 @@
-import { recordDetailSchema, recordPageSchema, type WorkbenchRecord } from "@agent-app/contracts";
+import { collectionSchema, recordDetailSchema, recordPageSchema, savedViewSchema, type WorkbenchRecord } from "@agent-app/contracts";
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
+import { CurationPanel } from "@/components/curation/curation-panel";
 import { DataTable } from "@/components/data/data-table";
 import { Status } from "@/components/feedback/status";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,8 @@ export function RecordsPage() {
   const sort = params.get("sort") === "-title" ? "-title" : "title";
   const page = positive(params.get("page"));
   const drawerId = params.get("drawer");
+  const tag = params.get("tag") ?? "";
+  const collection = params.get("collection") ?? "";
   const category = params.get("category") ?? "";
   const from = params.get("from") ?? "";
   const to = params.get("to") ?? "";
@@ -26,6 +29,9 @@ export function RecordsPage() {
   const [rows, setRows] = useState<WorkbenchRecord[]>([]);
   const [total, setTotal] = useState(0);
   const [canDelete, setCanDelete] = useState(true);
+  const [canCurate, setCanCurate] = useState(true);
+  const [membershipState, setMembershipState] = useState<"idle" | "loading" | "error" | "success" | "forbidden">("idle");
+  const [activeCollection, setActiveCollection] = useState<string | null>(null);
   const [selected, setSelected] = useState<string[]>([]);
   const [pendingDelete, setPendingDelete] = useState<string[]>([]);
   const [notice, setNotice] = useState<{ tone: "success" | "error"; title: string } | null>(null);
@@ -49,6 +55,8 @@ export function RecordsPage() {
     const search = new URLSearchParams({ sort, page: String(page) });
     if (query) search.set("q", query);
     if (status) search.set("status", status);
+    if (tag) search.set("tag", tag);
+    if (collection) search.set("collection", collection);
     if (category) search.set("category", category);
     if (from) search.set("from", from);
     if (to) search.set("to", to);
@@ -59,6 +67,7 @@ export function RecordsPage() {
         setTotal(result.total);
         setPageSize(result.pageSize);
         setCanDelete(result.canDelete);
+        setCanCurate(result.canCurate);
         setPhase("ready");
       })
       .catch((error: unknown) => {
@@ -69,7 +78,7 @@ export function RecordsPage() {
     return () => {
       cancelled = true;
     };
-  }, [query, status, category, from, to, sort, page, reloadKey]);
+  }, [query, status, tag, collection, category, from, to, sort, page, reloadKey]);
 
   useEffect(() => {
     if (!drawerId) return;
@@ -112,6 +121,95 @@ export function RecordsPage() {
     }
   }
 
+  async function tagSelected(name: string) {
+    if (selected.length === 0) return;
+    try {
+      await apiFetch("/api/tags", () => undefined, {
+        method: "POST",
+        body: JSON.stringify({ name, ids: selected }),
+      });
+      setNotice({ tone: "success", title: "Tag applied" });
+      replace({ tag: name, page: "1" });
+      setReloadKey((value) => value + 1);
+    } catch (error) {
+      setNotice({
+        tone: "error",
+        title: error instanceof ApiError && error.status === 403 ? "You do not have permission to curate records" : "Could not apply the tag",
+      });
+    }
+  }
+
+  async function saveView(name: string) {
+    try {
+      await apiFetch("/api/views", (value) => savedViewSchema.parse(value), {
+        method: "POST",
+        body: JSON.stringify({
+          name,
+          query: {
+            ...(query ? { q: query } : {}),
+            ...(status ? { status } : {}),
+            ...(tag ? { tag } : {}),
+            ...(collection ? { collection } : {}),
+            sort,
+            ...(page > 1 ? { page } : {}),
+          },
+        }),
+      });
+      setNotice({ tone: "success", title: "View saved" });
+    } catch (error) {
+      setMembershipState(error instanceof ApiError && error.status === 403 ? "forbidden" : "error");
+      setNotice({
+        tone: "error",
+        title: error instanceof ApiError && error.status === 403 ? "You do not have permission to curate records" : "Could not save the view",
+      });
+    }
+  }
+
+  async function collectionIdFor(name: string): Promise<string> {
+    if (activeCollection) return activeCollection;
+    const created = await apiFetch("/api/collections", (value) => collectionSchema.parse(value), {
+      method: "POST",
+      body: JSON.stringify({ name: name.trim() || "Inbox" }),
+    });
+    setActiveCollection(created.id);
+    replace({ collection: created.id, page: "1" });
+    return created.id;
+  }
+
+  async function includeSelected(name: string) {
+    if (selected.length === 0) return;
+    setMembershipState("loading");
+    try {
+      const id = await collectionIdFor(name);
+      await apiFetch(`/api/collections/${id}/membership`, () => undefined, {
+        method: "POST",
+        body: JSON.stringify({ action: "include", ids: selected }),
+      });
+      setMembershipState("success");
+      setNotice({ tone: "success", title: "Membership updated" });
+    } catch (error) {
+      setMembershipState(error instanceof ApiError && error.status === 403 ? "forbidden" : "error");
+      setNotice({ tone: "error", title: "That batch was not applied." });
+    }
+  }
+
+  async function annotateSelected(input: { name: string; rationale: string }) {
+    if (selected.length === 0) return;
+    setMembershipState("loading");
+    try {
+      const id = await collectionIdFor(input.name);
+      await apiFetch(`/api/collections/${id}/membership`, () => undefined, {
+        method: "POST",
+        body: JSON.stringify({ action: "annotate", ids: selected, rationale: input.rationale }),
+      });
+      setMembershipState("success");
+      setNotice({ tone: "success", title: "Membership updated" });
+    } catch (error) {
+      setMembershipState(error instanceof ApiError && error.status === 403 ? "forbidden" : "error");
+      setNotice({ tone: "error", title: "That batch was not applied." });
+    }
+  }
+
   return (
     <section className="grid gap-6" aria-labelledby="records-heading">
       <div className="flex flex-wrap items-end justify-between gap-3">
@@ -138,6 +236,14 @@ export function RecordsPage() {
           </Link>
         </div>
       </div>
+      <CurationPanel
+        canCurate={canCurate}
+        membershipState={membershipState}
+        onTag={(name) => void tagSelected(name)}
+        onSaveView={(name) => void saveView(name)}
+        onInclude={(name) => void includeSelected(name)}
+        onAnnotate={(input) => void annotateSelected(input)}
+      />
       {notice ? <Status tone={notice.tone} title={notice.title} /> : null}
       {phase === "loading" ? <Status tone="loading" title="Loading records" /> : null}
       {phase === "forbidden" ? <Status tone="forbidden" title="You do not have permission to view records" /> : null}

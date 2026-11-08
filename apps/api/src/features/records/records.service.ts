@@ -24,6 +24,8 @@ export { AccessDeniedError as RecordForbiddenError } from "../../access/record-a
 export type RecordListQuery = {
   q?: string;
   status?: "open" | "closed";
+  tag?: string;
+  collection?: string;
   category?: string;
   from?: Date;
   to?: Date;
@@ -64,6 +66,7 @@ export async function listRecords(db: Db, userId: string, query: RecordListQuery
     page: query.page,
     pageSize: query.pageSize,
     canDelete: access.canDelete,
+    canCurate: access.canCurate,
   };
 }
 
@@ -171,6 +174,26 @@ function filters(userId: string, query: RecordListQuery): SQL | undefined {
   const parts: SQL[] = [eq(record.userId, userId)];
   if (query.status) parts.push(eq(record.status, query.status));
   if (query.q) parts.push(sql`${record.title} ILIKE ${likePattern(query.q)} ESCAPE '\\'`);
+  if (query.tag) {
+    parts.push(sql`exists (
+      select 1 from record_tag
+      join tag on tag.id = record_tag.tag_id
+      where record_tag.record_id = ${record.id}
+        and tag.user_id = ${userId}
+        and record_tag.user_id = ${userId}
+        and tag.name = ${query.tag}
+    )`);
+  }
+  if (query.collection) {
+    parts.push(sql`exists (
+      select 1 from membership
+      join collection on collection.id = membership.collection_id
+      where membership.record_id = ${record.id}
+        and membership.user_id = ${userId}
+        and collection.user_id = ${userId}
+        and collection.id = ${query.collection}::uuid
+    )`);
+  }
   if (query.from || query.to || query.category) {
     parts.push(sql`exists (
       select 1 from observation

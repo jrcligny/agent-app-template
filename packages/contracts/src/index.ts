@@ -103,6 +103,7 @@ export const recordPageSchema = z.object({
   page: z.number().int().positive(),
   pageSize: z.number().int().positive(),
   canDelete: z.boolean(),
+  canCurate: z.boolean(),
 });
 
 export const recordCountsSchema = z.object({
@@ -152,6 +153,37 @@ export const activityPageSchema = z.object({
   total: z.number().int().nonnegative(),
   page: z.number().int().positive(),
   pageSize: z.number().int().positive(),
+});
+
+export const viewQuerySchema = z.object({
+  q: z.string().trim().max(200).optional(),
+  status: z.enum(["open", "closed"]).optional(),
+  tag: z.string().trim().regex(/^[a-z0-9-]{1,40}$/).optional(),
+  collection: z.string().uuid().optional(),
+  sort: z.enum(["title", "-title"]).optional(),
+  page: z.number().int().min(1).max(10_000).optional(),
+});
+
+export const savedViewSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1).max(80),
+  query: z.string().max(500),
+});
+
+export const saveViewSchema = z.object({
+  name: z.string().trim().min(1).max(80),
+  query: viewQuerySchema,
+});
+
+export const collectionSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1).max(80),
+});
+
+export const membershipChangeSchema = z.object({
+  action: z.enum(["include", "exclude", "annotate"]),
+  ids: z.array(z.string().uuid()).min(1).max(100),
+  rationale: z.string().trim().max(500).optional(),
 });
 
 export const settingsPageSizeSchema = z.union([z.literal(10), z.literal(25), z.literal(50)]);
@@ -211,4 +243,7 @@ export type CreateJob = z.infer<typeof createJobSchema>;
 export type ActivityEvent = z.infer<typeof activityEventSchema>;
 export type ActivityPage = z.infer<typeof activityPageSchema>;
 export type Settings = z.infer<typeof settingsSchema>;
+export type ViewQuery = z.infer<typeof viewQuerySchema>;
+export type SavedView = z.infer<typeof savedViewSchema>;
+export type Collection = z.infer<typeof collectionSchema>;
 export type AnalyticsReport = z.infer<typeof analyticsReportSchema>;

@@ -22,6 +22,8 @@ const recordIdSchema = z.string().uuid();
 const listQuerySchema = z.object({
   q: z.string().trim().max(200).optional(),
   status: z.enum(["open", "closed"]).optional(),
+  tag: z.string().trim().regex(/^[a-z0-9-]{1,40}$/).optional(),
+  collection: z.string().uuid().optional(),
   category: z.string().trim().min(1).max(80).optional(),
   from: z.string().datetime().optional(),
   to: z.string().datetime().optional(),
@@ -60,6 +62,8 @@ export function registerRecordRoutes(app: Hono, db: Db, auth: Auth): void {
     const parsed = listQuerySchema.safeParse({
       q: emptyAsUndefined(c.req.query("q")),
       status: emptyAsUndefined(c.req.query("status")),
+      tag: emptyAsUndefined(c.req.query("tag")),
+      collection: emptyAsUndefined(c.req.query("collection")),
       category: emptyAsUndefined(c.req.query("category")),
       from: emptyAsUndefined(c.req.query("from")),
       to: emptyAsUndefined(c.req.query("to")),

@@ -29,6 +29,13 @@
       "when": 1794160000000,
       "tag": "0003_observation",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794170000000,
+      "tag": "0004_curation",
+      "breakpoints": true
     }
   ]
 }
