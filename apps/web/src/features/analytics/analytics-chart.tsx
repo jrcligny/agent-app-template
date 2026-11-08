@@ -15,13 +15,7 @@ export function drillHref(input: {
   return `/records?${params.toString()}`;
 }
 
-export function AnalyticsChart({
-  report,
-  narrow = false,
-}: {
-  report: AnalyticsReport;
-  narrow?: boolean;
-}) {
+export function AnalyticsChart({ report }: { report: AnalyticsReport }) {
   const { from, to } = report.window;
   return (
     <div className="grid gap-6">

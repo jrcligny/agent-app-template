@@ -35,7 +35,7 @@ const report: AnalyticsReport = {
 
 it("AN-2 drills from the keyboard and keeps the data table when narrow", () => {
   window.innerWidth = 320;
-  render(<AnalyticsChart report={report} narrow />);
+  render(<AnalyticsChart report={report} />);
   const closed = screen.getByRole("link", { name: "closed status, 1 observations" });
   closed.focus();
   expect(document.activeElement).toBe(closed);
