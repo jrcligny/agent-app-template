@@ -1,7 +1,7 @@
 import { randomBytes } from "node:crypto";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
-import { Pool } from "pg";
+import { Pool, type Pool as PgPool } from "pg";
 import { migrationsFolder } from "../migrate.js";
 
 const DISPOSABLE = /^(slice_[a-z0-9]+)$/;
@@ -38,6 +38,7 @@ export async function withDisposableDatabase(
   run: (databaseUrl: string) => Promise<void>,
 ): Promise<void> {
   const admin = new Pool({ connectionString: adminDatabaseUrl(), max: 1 });
+  ignoreAdminShutdown(admin);
   const name = `slice_${randomBytes(4).toString("hex")}`;
   const databaseUrl = databaseUrlFor(name);
   assertDisposableDatabase(databaseUrl);
@@ -45,6 +46,7 @@ export async function withDisposableDatabase(
   try {
     if (applySchema) {
       const pool = new Pool({ connectionString: databaseUrl, max: 1 });
+      ignoreAdminShutdown(pool);
       try {
         await migrate(drizzle(pool), { migrationsFolder: migrationsFolder() });
       } finally {
@@ -56,4 +58,11 @@ export async function withDisposableDatabase(
     await admin.query(`drop database if exists ${name} with (force)`);
     await admin.end();
   }
+}
+
+export function ignoreAdminShutdown(pool: PgPool): void {
+  pool.on("error", (error: Error & { code?: string }) => {
+    if (error.code === "57P01") return;
+    throw error;
+  });
 }

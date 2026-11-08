@@ -4,7 +4,7 @@ import { parseEnv } from "../env.js";
 import { createAuth } from "../auth/create-auth.js";
 import { createApp } from "../app.js";
 import * as schema from "../db/schema.js";
-import { assertDisposableDatabase } from "./database.js";
+import { assertDisposableDatabase, ignoreAdminShutdown } from "./database.js";
 
 export const testOrigin = "http://127.0.0.1:4173";
 
@@ -20,6 +20,7 @@ export async function createTestApp(databaseUrl: string) {
     SECURE_COOKIES: "false",
   });
   const pool = new Pool({ connectionString: databaseUrl, max: 4 });
+  ignoreAdminShutdown(pool);
   const db = drizzle(pool, { schema });
   const auth = createAuth(db, env);
   const app = createApp({ db, auth, trustedOrigins: env.trustedOrigins });
