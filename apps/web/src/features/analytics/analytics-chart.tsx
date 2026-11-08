@@ -45,8 +45,8 @@ export function AnalyticsChart({ report }: { report: AnalyticsReport }) {
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={report.countSeries}>
               <CartesianGrid stroke="var(--color-line)" />
-              <XAxis dataKey="day" />
-              <YAxis allowDecimals={false} />
+              <XAxis dataKey="day" stroke="var(--color-line)" tick={{ fill: "var(--color-ink)" }} />
+              <YAxis allowDecimals={false} stroke="var(--color-line)" tick={{ fill: "var(--color-ink)" }} />
               <Line dataKey="count" name="Count" stroke="var(--color-accent)" strokeWidth={2} dot />
             </LineChart>
           </ResponsiveContainer>

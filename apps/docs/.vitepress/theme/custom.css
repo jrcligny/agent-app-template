@@ -1,0 +1,19 @@
+:root {
+  --vp-c-brand-1: #06b6d4;
+  --vp-c-brand-2: #0f172a;
+  --vp-c-brand-3: #06b6d4;
+  --vp-c-bg: #f0fdfa;
+  --vp-c-bg-soft: #ffffff;
+  --vp-c-text-1: #0f172a;
+  --vp-c-text-2: #334155;
+}
+
+.dark {
+  --vp-c-brand-1: #06b6d4;
+  --vp-c-brand-2: #f8fafc;
+  --vp-c-brand-3: #06b6d4;
+  --vp-c-bg: #0f172a;
+  --vp-c-bg-soft: #1e293b;
+  --vp-c-text-1: #f8fafc;
+  --vp-c-text-2: #94a3b8;
+}

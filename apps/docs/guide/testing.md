@@ -18,6 +18,7 @@ Tests follow behavior. There is no coverage percentage gate and no fixed test co
 | Snapshot integration | A published title stays after the source record is renamed or deleted. Another account receives 404. A session that cannot publish receives 403 and no new row. Coverage lists a missing category only when the target includes it. |
 | Section tree | Keyboard expands a nested section. Text is text. Loading, empty, and error statuses are named. |
 | Wizard progress | The progressbar value text matches the visible step sentence. Next follows Back and uses content width. |
+| Theme | An explicit light or dark choice is stored. System is the default and follows the preference. Contrast checks record the approved pairs and the cyan pairs that stay unused because they are below AA. |
 | Playwright | Account journey, validation focus, saved note, narrow viewport, second account, the workbench create and confirmed delete journey, wizard progress on a wide and a 375px viewport, and axe on those screens. | |
 
 Playwright saves screenshots when `ARTIFACTS_DIR` is set. Axe reports rule violations it can see. It does not certify the visual design. A human still reviews the UI.

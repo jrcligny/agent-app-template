@@ -4,5 +4,5 @@
     "module": "ESNext",
     "moduleResolution": "Bundler"
   },
-  "include": [".vitepress/**/*.ts"]
+  "include": [".vitepress/**/*.ts", ".vitepress/**/*.d.ts"]
 }

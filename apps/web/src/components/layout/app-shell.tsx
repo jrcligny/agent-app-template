@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { ThemeSwitch } from "@/components/theme/theme-switch";
 
 export function AppShell({
   account,
@@ -25,6 +26,7 @@ export function AppShell({
           </div>
           <div className="flex flex-wrap items-center gap-3 text-sm">
             {nav}
+            <ThemeSwitch />
             {account}
           </div>
         </div>

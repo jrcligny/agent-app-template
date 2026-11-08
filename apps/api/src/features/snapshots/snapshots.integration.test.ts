@@ -1,4 +1,4 @@
-import { errorBodySchema, recordSchema } from "@agent-app/contracts";
+import { recordSchema } from "@agent-app/contracts";
 import { eq } from "drizzle-orm";
 import { describe, expect, it } from "vitest";
 import { collection, observation, recordPermission, snapshot, snapshotMember } from "../../db/schema.js";

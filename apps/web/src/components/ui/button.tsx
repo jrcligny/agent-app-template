@@ -7,9 +7,9 @@ const buttonStyles = cva(
   {
     variants: {
       variant: {
-        primary: "bg-accent text-accent-ink",
-        quiet: "bg-transparent text-ink",
-        danger: "bg-danger-bg text-danger",
+        primary: "border border-accent bg-accent text-accent-ink hover:ring-2 hover:ring-ink hover:ring-offset-2 hover:ring-offset-canvas",
+        quiet: "border border-accent bg-transparent text-secondary",
+        danger: "border border-danger bg-danger-bg text-danger",
       },
     },
     defaultVariants: { variant: "primary" },
