@@ -40,6 +40,18 @@ export function App() {
             <Link to="/notes" className="underline">
               Notes
             </Link>
+            <Link to="/wizard" className="underline">
+              Wizard
+            </Link>
+            <Link to="/jobs" className="underline">
+              Jobs
+            </Link>
+            <Link to="/activity" className="underline">
+              Activity
+            </Link>
+            <Link to="/settings" className="underline">
+              Settings
+            </Link>
           </nav>
         ) : null
       }

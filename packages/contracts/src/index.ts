@@ -118,6 +118,49 @@ export const bulkDeleteRecordsSchema = z.object({
   ids: z.array(z.string().uuid()).min(1).max(100),
 });
 
+export const jobStatusSchema = z.enum(["queued", "running", "succeeded", "failed", "cancelled"]);
+export const jobOutcomeSchema = z.enum(["complete", "fail"]);
+
+export const jobSchema = z.object({
+  id: z.string().uuid(),
+  status: jobStatusSchema,
+  outcome: jobOutcomeSchema,
+  progress: z.number().int().min(0).max(100),
+  attempt: z.number().int().positive(),
+  replacesJobId: z.string().uuid().nullable(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
+export const createJobSchema = z.object({
+  outcome: jobOutcomeSchema,
+});
+
+export const jobListSchema = z.object({
+  jobs: z.array(jobSchema),
+});
+
+export const activityEventSchema = z.object({
+  id: z.string().uuid(),
+  kind: z.string().min(1),
+  summary: z.string().min(1),
+  createdAt: z.string().datetime(),
+});
+
+export const activityPageSchema = z.object({
+  events: z.array(activityEventSchema),
+  total: z.number().int().nonnegative(),
+  page: z.number().int().positive(),
+  pageSize: z.number().int().positive(),
+});
+
+export const settingsPageSizeSchema = z.union([z.literal(10), z.literal(25), z.literal(50)]);
+
+export const settingsSchema = z.object({
+  displayName: z.string().trim().min(1).max(200),
+  pageSize: settingsPageSizeSchema,
+});
+
 export type HealthResponse = z.infer<typeof healthResponseSchema>;
 export type ReadinessResponse = z.infer<typeof readinessResponseSchema>;
 export type ErrorBody = z.infer<typeof errorBodySchema>;
@@ -133,3 +176,9 @@ export type RecordPage = z.infer<typeof recordPageSchema>;
 export type RecordCounts = z.infer<typeof recordCountsSchema>;
 export type RecordDetail = z.infer<typeof recordDetailSchema>;
 export type BulkDeleteRecords = z.infer<typeof bulkDeleteRecordsSchema>;
+export type Job = z.infer<typeof jobSchema>;
+export type JobList = z.infer<typeof jobListSchema>;
+export type CreateJob = z.infer<typeof createJobSchema>;
+export type ActivityEvent = z.infer<typeof activityEventSchema>;
+export type ActivityPage = z.infer<typeof activityPageSchema>;
+export type Settings = z.infer<typeof settingsSchema>;

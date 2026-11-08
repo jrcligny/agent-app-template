@@ -28,7 +28,7 @@ export function RecordsPage() {
   const [notice, setNotice] = useState<{ tone: "success" | "error"; title: string } | null>(null);
   const [drawerPhase, setDrawerPhase] = useState<"loading" | "error" | "ready">("loading");
   const [drawerRecord, setDrawerRecord] = useState<WorkbenchRecord | null>(null);
-  const pageSize = 20;
+  const [pageSize, setPageSize] = useState(25);
   const pageCount = Math.max(1, Math.ceil(total / pageSize));
 
   function replace(next: Record<string, string | null>) {
@@ -43,7 +43,7 @@ export function RecordsPage() {
   useEffect(() => {
     let cancelled = false;
     setPhase("loading");
-    const search = new URLSearchParams({ sort, page: String(page), pageSize: String(pageSize) });
+    const search = new URLSearchParams({ sort, page: String(page) });
     if (query) search.set("q", query);
     if (status) search.set("status", status);
     void apiFetch(`/api/records?${search.toString()}`, (value) => recordPageSchema.parse(value))
@@ -51,6 +51,7 @@ export function RecordsPage() {
         if (cancelled) return;
         setRows(result.records);
         setTotal(result.total);
+        setPageSize(result.pageSize);
         setCanDelete(result.canDelete);
         setPhase("ready");
       })
@@ -114,9 +115,14 @@ export function RecordsPage() {
           </h1>
           <p className="text-sm text-muted">Search, filter, and page only the records on your account.</p>
         </div>
-        <Link to="/records/new" className="inline-flex rounded-md bg-accent px-3 py-2 text-sm font-medium text-accent-ink">
-          New record
-        </Link>
+        <div className="flex flex-wrap gap-3">
+          <Link to="/records/new" className="inline-flex rounded-md bg-accent px-3 py-2 text-sm font-medium text-accent-ink">
+            New record
+          </Link>
+          <Link to="/wizard" className="inline-flex items-center text-sm underline">
+            Guided wizard
+          </Link>
+        </div>
       </div>
       {notice ? <Status tone={notice.tone} title={notice.title} /> : null}
       {phase === "loading" ? <Status tone="loading" title="Loading records" /> : null}

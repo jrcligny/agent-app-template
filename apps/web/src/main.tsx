@@ -6,6 +6,10 @@ import { RecordDetailPage } from "./features/records/record-detail-page";
 import { RecordFormPage } from "./features/records/record-form-page";
 import { RecordsPage } from "./features/records/records-page";
 import { NotesPage } from "./features/notes/notes-page";
+import { ActivityPage } from "./features/activity/activity-page";
+import { JobPage } from "./features/jobs/job-page";
+import { SettingsPage } from "./features/settings/settings-page";
+import { RecordWizard } from "./features/wizard/record-wizard";
 import { DashboardPage } from "./features/workbench/dashboard-page";
 import "./index.css";
 
@@ -25,6 +29,10 @@ const router = createBrowserRouter([
       { path: "records/:id/edit", element: <RecordFormPage mode="edit" /> },
       { path: "records/:id", element: <RecordDetailPage /> },
       { path: "notes", element: <NotesPage /> },
+      { path: "wizard", element: <RecordWizard /> },
+      { path: "jobs", element: <JobPage /> },
+      { path: "activity", element: <ActivityPage /> },
+      { path: "settings", element: <SettingsPage /> },
     ],
   },
 ]);

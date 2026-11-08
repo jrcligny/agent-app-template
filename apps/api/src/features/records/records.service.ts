@@ -7,7 +7,9 @@ import {
   type WorkbenchRecord,
 } from "@agent-app/contracts";
 import { and, asc, count, desc, eq, inArray, sql, type SQL } from "drizzle-orm";
-import { record, recordPermission, user } from "../../db/schema.js";
+import { requireRecordDelete, requireRecordView } from "../../access/record-access.js";
+import { appendEvent } from "../../activity/events.js";
+import { record, user } from "../../db/schema.js";
 import type { Db } from "../../db/types.js";
 
 export class RecordNotFoundError extends Error {
@@ -17,12 +19,7 @@ export class RecordNotFoundError extends Error {
   }
 }
 
-export class RecordForbiddenError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "RecordForbiddenError";
-  }
-}
+export { AccessDeniedError as RecordForbiddenError } from "../../access/record-access.js";
 
 export type RecordListQuery = {
   q?: string;
@@ -33,7 +30,7 @@ export type RecordListQuery = {
 };
 
 export async function countRecords(db: Db, userId: string): Promise<RecordCounts> {
-  await requireView(db, userId);
+  await requireRecordView(db, userId);
   const owned = eq(record.userId, userId);
   const allRows = await db.select({ value: count() }).from(record).where(owned);
   const openRows = await db
@@ -47,7 +44,7 @@ export async function countRecords(db: Db, userId: string): Promise<RecordCounts
 }
 
 export async function listRecords(db: Db, userId: string, query: RecordListQuery): Promise<RecordPage> {
-  const access = await requireView(db, userId);
+  const access = await requireRecordView(db, userId);
   const where = filters(userId, query);
   const totalRows = await db.select({ value: count() }).from(record).where(where);
   const rows = await db
@@ -68,7 +65,7 @@ export async function listRecords(db: Db, userId: string, query: RecordListQuery
 }
 
 export async function createRecord(db: Db, userId: string, input: RecordWrite): Promise<WorkbenchRecord> {
-  await requireView(db, userId);
+  await requireRecordView(db, userId);
   const now = new Date();
   const inserted = await db
     .insert(record)
@@ -85,11 +82,18 @@ export async function createRecord(db: Db, userId: string, input: RecordWrite): 
     .returning({ id: record.id });
   const id = inserted[0]?.id;
   if (!id) throw new Error("Insert did not return a record");
+  await appendEvent(db, {
+    userId,
+    recordId: id,
+    kind: "record.created",
+    summary: `Created record "${input.title}"`,
+    createdAt: now,
+  });
   return getOwned(db, userId, id);
 }
 
 export async function getRecord(db: Db, userId: string, id: string): Promise<RecordDetail> {
-  const access = await requireView(db, userId);
+  const access = await requireRecordView(db, userId);
   const found = await getOwned(db, userId, id);
   return { ...found, canDelete: access.canDelete };
 }
@@ -100,7 +104,7 @@ export async function updateRecord(
   id: string,
   input: RecordWrite,
 ): Promise<WorkbenchRecord> {
-  await requireView(db, userId);
+  await requireRecordView(db, userId);
   const rows = await db
     .update(record)
     .set({
@@ -114,21 +118,35 @@ export async function updateRecord(
     .where(and(eq(record.id, id), eq(record.userId, userId)))
     .returning({ id: record.id });
   if (!rows[0]) throw new RecordNotFoundError();
+  await appendEvent(db, {
+    userId,
+    recordId: id,
+    kind: "record.updated",
+    summary: `Updated record "${input.title}"`,
+  });
   return getOwned(db, userId, id);
 }
 
 export async function deleteRecords(db: Db, userId: string, ids: readonly string[]): Promise<void> {
-  await requireDelete(db, userId);
+  await requireRecordDelete(db, userId);
   const uniqueIds = [...new Set(ids)];
   await db.transaction(async (tx) => {
     const found = await tx
-      .select({ id: record.id })
+      .select({ id: record.id, title: record.title })
       .from(record)
       .where(and(eq(record.userId, userId), inArray(record.id, uniqueIds)));
     if (found.length !== uniqueIds.length) {
       throw new RecordNotFoundError(
         uniqueIds.length === 1 ? "Record not found" : "That batch was not applied.",
       );
+    }
+    for (const item of found) {
+      await appendEvent(tx, {
+        userId,
+        recordId: item.id,
+        kind: "record.deleted",
+        summary: `Deleted record "${item.title}"`,
+      });
     }
     await tx.delete(record).where(and(eq(record.userId, userId), inArray(record.id, uniqueIds)));
   });
@@ -189,28 +207,3 @@ function toRecord(row: {
   });
 }
 
-async function permissions(db: Db, userId: string): Promise<{ canView: boolean; canDelete: boolean }> {
-  const rows = await db
-    .select()
-    .from(recordPermission)
-    .where(eq(recordPermission.userId, userId))
-    .limit(1);
-  const row = rows[0];
-  if (!row) return { canView: true, canDelete: true };
-  return { canView: row.canView, canDelete: row.canDelete };
-}
-
-async function requireView(db: Db, userId: string): Promise<{ canView: boolean; canDelete: boolean }> {
-  const access = await permissions(db, userId);
-  if (!access.canView) {
-    throw new RecordForbiddenError("You do not have permission to view records");
-  }
-  return access;
-}
-
-async function requireDelete(db: Db, userId: string): Promise<void> {
-  const access = await requireView(db, userId);
-  if (!access.canDelete) {
-    throw new RecordForbiddenError("You do not have permission to delete records");
-  }
-}

@@ -1,4 +1,4 @@
-import { boolean, index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, index, integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 const timestamps = {
   createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
@@ -89,6 +89,47 @@ export const record = pgTable(
     ...timestamps,
   },
   (table) => [index("record_user_id_idx").on(table.userId)],
+);
+
+export const workbenchSettings = pgTable("workbench_settings", {
+  userId: text("user_id")
+    .primaryKey()
+    .references(() => user.id, { onDelete: "cascade" }),
+  displayName: text("display_name").notNull(),
+  pageSize: integer("page_size").notNull(),
+});
+
+export const activityEvent = pgTable(
+  "activity_event",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    recordId: uuid("record_id"),
+    kind: text("kind").notNull(),
+    summary: text("summary").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [index("activity_event_user_created_idx").on(table.userId, table.createdAt)],
+);
+
+export const job = pgTable(
+  "job",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    outcome: text("outcome").notNull(),
+    status: text("status").notNull(),
+    progress: integer("progress").notNull(),
+    attempt: integer("attempt").notNull(),
+    replacesJobId: uuid("replaces_job_id"),
+    retriedByJobId: uuid("retried_by_job_id"),
+    ...timestamps,
+  },
+  (table) => [index("job_user_id_idx").on(table.userId)],
 );
 
 export const note = pgTable(

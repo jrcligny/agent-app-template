@@ -5,6 +5,7 @@ import type { Auth } from "../../auth/create-auth.js";
 import { requireUser } from "../../auth/session.js";
 import type { Db } from "../../db/types.js";
 import { errorJson } from "../../http/errors.js";
+import { pageSizeFor } from "../../settings/preferences.js";
 import {
   RecordForbiddenError,
   RecordNotFoundError,
@@ -23,7 +24,7 @@ const listQuerySchema = z.object({
   status: z.enum(["open", "closed"]).optional(),
   sort: z.enum(["title", "-title"]).default("title"),
   page: z.coerce.number().int().min(1).default(1),
-  pageSize: z.coerce.number().int().min(1).max(50).default(20),
+  pageSize: z.coerce.number().int().min(1).max(50).optional(),
 });
 
 export function registerRecordRoutes(app: Hono, db: Db, auth: Auth): void {
@@ -62,7 +63,8 @@ export function registerRecordRoutes(app: Hono, db: Db, auth: Auth): void {
     });
     if (!parsed.success) return errorJson(c, 400, "validation", "Those table filters are not valid.");
     try {
-      return c.json(await listRecords(db, user.id, parsed.data));
+      const pageSize = parsed.data.pageSize ?? (await pageSizeFor(db, user.id));
+      return c.json(await listRecords(db, user.id, { ...parsed.data, pageSize }));
     } catch (error) {
       return mapRecordError(c, error);
     }
