@@ -53,6 +53,9 @@ export function App() {
             <Link to="/analytics" className="underline">
               Analytics
             </Link>
+            <Link to="/snapshots" className="underline">
+              Snapshots
+            </Link>
           </nav>
         ) : null
       }

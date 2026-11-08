@@ -11,6 +11,7 @@ import { registerJobRoutes } from "./features/jobs/jobs.http.js";
 import { registerNoteRoutes } from "./features/notes/notes.http.js";
 import { registerRecordRoutes } from "./features/records/records.http.js";
 import { registerSettingsRoutes } from "./features/settings/settings.http.js";
+import { registerSnapshotRoutes } from "./features/snapshots/snapshots.http.js";
 import { errorJson } from "./http/errors.js";
 import { logError } from "./logger.js";
 
@@ -43,6 +44,7 @@ export function createApp(deps: { db: Db; auth: Auth; trustedOrigins: readonly s
   registerAnalyticsRoutes(app, deps.db, deps.auth);
   registerCurationRoutes(app, deps.db, deps.auth);
   registerEvidenceRoutes(app, deps.db, deps.auth);
+  registerSnapshotRoutes(app, deps.db, deps.auth);
   app.notFound((c) => errorJson(c, 404, "not_found", "Not found"));
   app.onError((error, c) => {
       logError("request failed", { path: c.req.path, name: error.name });

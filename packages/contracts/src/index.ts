@@ -216,6 +216,58 @@ export const collectionSchema = z.object({
   name: z.string().min(1).max(80),
 });
 
+export const snapshotMemberSchema = z.object({
+  recordId: z.string().uuid(),
+  title: z.string(),
+  status: recordStatusSchema,
+  category: z.string(),
+  sourceUpdatedAt: z.string().datetime(),
+});
+
+export const snapshotSchema = z.object({
+  id: z.string().uuid(),
+  collectionId: z.string().uuid(),
+  name: z.string().min(1).max(80),
+  revision: z.number().int().positive(),
+  createdAt: z.string().datetime(),
+  members: z.array(snapshotMemberSchema),
+});
+
+export const coverageCountSchema = z.object({
+  category: z.string(),
+  count: z.number().int().nonnegative(),
+});
+
+export const coverageSchema = z.object({
+  memberCount: z.number().int().nonnegative(),
+  target: z.array(z.string()).nullable(),
+  counts: z.array(coverageCountSchema),
+  missing: z.array(z.string()),
+});
+
+export const draftCollectionSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  memberCount: z.number().int().nonnegative(),
+});
+
+export const draftMemberSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string(),
+  status: recordStatusSchema,
+  category: z.string(),
+});
+
+export const draftCollectionListSchema = z.object({
+  collections: z.array(draftCollectionSchema),
+});
+
+export const draftDetailSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  members: z.array(draftMemberSchema),
+});
+
 export const membershipChangeSchema = z.object({
   action: z.enum(["include", "exclude", "annotate"]),
   ids: z.array(z.string().uuid()).min(1).max(100),

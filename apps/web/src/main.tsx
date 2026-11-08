@@ -11,6 +11,7 @@ import { AnalyticsPage } from "./features/analytics/analytics-page";
 import { JobPage } from "./features/jobs/job-page";
 import { SettingsPage } from "./features/settings/settings-page";
 import { RecordWizard } from "./features/wizard/record-wizard";
+import { SnapshotsPage } from "./features/snapshots/snapshots-page";
 import { DashboardPage } from "./features/workbench/dashboard-page";
 import "./index.css";
 
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
       { path: "activity", element: <ActivityPage /> },
       { path: "settings", element: <SettingsPage /> },
       { path: "analytics", element: <AnalyticsPage /> },
+      { path: "snapshots", element: <SnapshotsPage /> },
     ],
   },
 ]);

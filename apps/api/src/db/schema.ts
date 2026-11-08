@@ -1,4 +1,4 @@
-import { boolean, index, integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, index, integer, pgTable, primaryKey, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 const timestamps = {
   createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
@@ -262,6 +262,49 @@ export const recordArtifact = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
   },
   (table) => [index("record_artifact_record_idx").on(table.recordId)],
+);
+
+export const snapshot = pgTable(
+  "snapshot",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    collectionId: uuid("collection_id").notNull(),
+    name: text("name").notNull(),
+    revision: integer("revision").notNull(),
+    submitKey: uuid("submit_key"),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [index("snapshot_user_idx").on(table.userId)],
+);
+
+export const snapshotMember = pgTable(
+  "snapshot_member",
+  {
+    snapshotId: uuid("snapshot_id")
+      .notNull()
+      .references(() => snapshot.id, { onDelete: "cascade" }),
+    recordId: uuid("record_id").notNull(),
+    title: text("title").notNull(),
+    status: text("status").notNull(),
+    category: text("category").notNull(),
+    sourceUpdatedAt: timestamp("source_updated_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.snapshotId, table.recordId] })],
+);
+
+export const snapshotTarget = pgTable(
+  "snapshot_target",
+  {
+    snapshotId: uuid("snapshot_id")
+      .notNull()
+      .references(() => snapshot.id, { onDelete: "cascade" }),
+    category: text("category").notNull(),
+    position: integer("position").notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.snapshotId, table.category] })],
 );
 
 export const note = pgTable(

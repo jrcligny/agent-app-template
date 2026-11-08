@@ -43,6 +43,13 @@
       "when": 1794180000000,
       "tag": "0005_evidence",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794190000000,
+      "tag": "0006_snapshot",
+      "breakpoints": true
     }
   ]
 }
