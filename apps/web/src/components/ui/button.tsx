@@ -7,8 +7,8 @@ const buttonStyles = cva(
   {
     variants: {
       variant: {
-        primary: "border border-accent bg-accent text-accent-ink hover:ring-2 hover:ring-ink hover:ring-offset-2 hover:ring-offset-canvas",
-        quiet: "border border-accent bg-transparent text-secondary",
+        primary: "border-2 border-focus bg-accent text-accent-ink hover:ring-2 hover:ring-ink hover:ring-offset-2 hover:ring-offset-canvas",
+        quiet: "border-2 border-focus bg-transparent text-secondary shadow-[inset_0_0_0_2px_var(--color-accent)]",
         danger: "border border-danger bg-danger-bg text-danger",
       },
     },
