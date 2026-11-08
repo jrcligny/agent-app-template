@@ -8,8 +8,10 @@ Tests follow behavior. There is no coverage percentage gate and no fixed test co
 | `migration-policy.test.ts` | Destructive SQL is rejected before a database is used. |
 | Health integration | Real Hono requests. Liveness without a schema. Readiness before and after migrate. A second migrate keeps a row. |
 | Notes integration | Real sign-up, HttpOnly cookie, untrusted origin, sign-out, owner list, cross-account 404, empty title. Disposable `slice_*` databases on localhost only. |
-| Status component test | Shared loading, empty, error, and success names. |
-| Playwright | Account journey, validation focus, saved note, narrow viewport, second account, and axe on those screens. |
+| Records integration | Counts, forbidden list, filtered page, cross-account 404, closed-record validation, and atomic delete. Same disposable databases. |
+| Workbench component tests | Dashboard counts, table selection, drawer focus, form validation, unsaved changes, and dismissed delete. |
+| Status component test | Shared loading, empty, error, success, and forbidden names. |
+| Playwright | Account journey, validation focus, saved note, narrow viewport, second account, the workbench create and confirmed delete journey, and axe on those screens. |
 
 Playwright saves screenshots when `ARTIFACTS_DIR` is set. Axe reports rule violations it can see. It does not certify the visual design. A human still reviews the UI.
 

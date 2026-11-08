@@ -66,6 +66,31 @@ export const verification = pgTable(
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
+export const recordPermission = pgTable("record_permission", {
+  userId: text("user_id")
+    .primaryKey()
+    .references(() => user.id, { onDelete: "cascade" }),
+  canView: boolean("can_view").notNull(),
+  canDelete: boolean("can_delete").notNull(),
+});
+
+export const record = pgTable(
+  "record",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    status: text("status").notNull(),
+    summary: text("summary").notNull(),
+    body: text("body").notNull(),
+    reason: text("reason"),
+    ...timestamps,
+  },
+  (table) => [index("record_user_id_idx").on(table.userId)],
+);
+
 export const note = pgTable(
   "note",
   {

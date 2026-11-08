@@ -3,10 +3,12 @@ import type { ReactNode } from "react";
 export function AppShell({
   health,
   account,
+  nav,
   children,
 }: {
   health: ReactNode;
   account?: ReactNode;
+  nav?: ReactNode;
   children: ReactNode;
 }) {
   return (
@@ -18,18 +20,19 @@ export function AppShell({
         Skip to content
       </a>
       <header className="border-b border-line bg-surface">
-        <div className="mx-auto flex w-full max-w-3xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-lg font-semibold">Notes</p>
-            <p className="text-sm text-muted">Private notes for people with an account.</p>
+            <p className="text-lg font-semibold">Workbench</p>
+            <p className="text-sm text-muted">Synthetic records for people with an account.</p>
           </div>
           <div className="flex flex-wrap items-center gap-3 text-sm">
+            {nav}
             {health}
             {account}
           </div>
         </div>
       </header>
-      <main id="content" className="mx-auto grid w-full max-w-3xl gap-6 px-4 py-8">
+      <main id="content" className="mx-auto grid w-full max-w-5xl gap-6 px-4 py-8">
         {children}
       </main>
     </div>

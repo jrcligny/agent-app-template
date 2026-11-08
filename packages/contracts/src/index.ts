@@ -58,6 +58,66 @@ export const updateNoteSchema = z
     message: "Provide a title or a body to update",
   });
 
+export const recordStatusSchema = z.enum(["open", "closed"]);
+
+export const recordSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string().min(1).max(200),
+  status: recordStatusSchema,
+  ownerName: z.string().min(1),
+  summary: z.string().max(2_000),
+  body: z.string().max(20_000),
+  reason: z.string().min(1).max(2_000).nullable(),
+  createdAt: z.string().datetime(),
+  updatedAt: z.string().datetime(),
+});
+
+export const recordWriteSchema = z
+  .object({
+    title: z.string().trim().min(1).max(200),
+    status: recordStatusSchema,
+    summary: z.string().trim().max(2_000),
+    body: z.string().max(20_000),
+    reason: z.string().trim().max(2_000).optional(),
+  })
+  .superRefine((value, context) => {
+    if (value.status === "closed" && !value.reason) {
+      context.addIssue({
+        code: "custom",
+        path: ["reason"],
+        message: "Enter a reason for closing the record.",
+      });
+    }
+    if (value.status === "open" && value.reason) {
+      context.addIssue({
+        code: "custom",
+        path: ["reason"],
+        message: "An open record cannot include a reason.",
+      });
+    }
+  });
+
+export const recordPageSchema = z.object({
+  records: z.array(recordSchema),
+  total: z.number().int().nonnegative(),
+  page: z.number().int().positive(),
+  pageSize: z.number().int().positive(),
+  canDelete: z.boolean(),
+});
+
+export const recordCountsSchema = z.object({
+  all: z.number().int().nonnegative(),
+  open: z.number().int().nonnegative(),
+});
+
+export const recordDetailSchema = recordSchema.extend({
+  canDelete: z.boolean(),
+});
+
+export const bulkDeleteRecordsSchema = z.object({
+  ids: z.array(z.string().uuid()).min(1).max(100),
+});
+
 export type HealthResponse = z.infer<typeof healthResponseSchema>;
 export type ReadinessResponse = z.infer<typeof readinessResponseSchema>;
 export type ErrorBody = z.infer<typeof errorBodySchema>;
@@ -66,3 +126,10 @@ export type Note = z.infer<typeof noteSchema>;
 export type NoteList = z.infer<typeof noteListSchema>;
 export type CreateNoteInput = z.infer<typeof createNoteSchema>;
 export type UpdateNoteInput = z.infer<typeof updateNoteSchema>;
+export type RecordStatus = z.infer<typeof recordStatusSchema>;
+export type WorkbenchRecord = z.infer<typeof recordSchema>;
+export type RecordWrite = z.infer<typeof recordWriteSchema>;
+export type RecordPage = z.infer<typeof recordPageSchema>;
+export type RecordCounts = z.infer<typeof recordCountsSchema>;
+export type RecordDetail = z.infer<typeof recordDetailSchema>;
+export type BulkDeleteRecords = z.infer<typeof bulkDeleteRecordsSchema>;

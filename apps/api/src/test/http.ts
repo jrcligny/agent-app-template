@@ -25,6 +25,7 @@ export async function createTestApp(databaseUrl: string) {
   const app = createApp({ db, auth, trustedOrigins: env.trustedOrigins });
   return {
     app,
+    db,
     async close() {
       await pool.end();
     },
@@ -53,7 +54,12 @@ export async function signUp(
   if (!cookie) {
     throw new Error(`sign-up returned no cookie: ${text}`);
   }
-  return { cookie, setCookie, body: text };
+  const parsed = JSON.parse(text) as { user?: { id?: string } };
+  const userId = parsed.user?.id;
+  if (!userId) {
+    throw new Error("sign-up returned no user id");
+  }
+  return { cookie, setCookie, body: text, userId };
 }
 
 export function credentialed(cookie: string, extra?: Record<string, string>): Record<string, string> {

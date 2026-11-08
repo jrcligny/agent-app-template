@@ -2,9 +2,9 @@
 
 `packages/contracts` holds Zod schemas for JSON the browser and API share. It does not import Hono, Drizzle, or better-auth.
 
-`apps/api` is a Hono process. `src/features/notes/notes.http.ts` parses requests and status codes. `notes.service.ts` applies owner checks and talks to PostgreSQL. Health routes stay next to their SQL check because there is no extra rule to extract. Auth session lookup is shared infrastructure, not a note feature.
+`apps/api` is a Hono process. `src/features/notes/notes.http.ts` parses requests and status codes. `notes.service.ts` applies owner checks and talks to PostgreSQL. Record routes do the same for synthetic workbench records: the HTTP file parses, and `records.service.ts` applies the owner check, the view and delete permission, and the all-or-nothing delete. Health routes stay next to their SQL check because there is no extra rule to extract. Auth session lookup is shared infrastructure, not a note feature.
 
-`apps/web` is Vite, React, and Tailwind CSS v4. Screens use `Button`, `TextField`, `Card`, and `Status`. Feature folders do not import each other. Shared components do not import features. The browser calls `/api` on the same origin. Vite proxies that path in development. The web image and the Helm ingress do the same in deployment.
+`apps/web` is Vite, React, and Tailwind CSS v4. Screens use `Button`, `TextField`, `SelectField`, `Card`, and `Status`. The workbench adds `DataTable`, `Drawer`, and `ConfirmDialog` because more than one screen needs them. Feature folders do not import each other. Shared components do not import features. The browser calls `/api` on the same origin. Vite proxies that path in development. The web image and the Helm ingress do the same in deployment.
 
 `pnpm check:architecture` fails the build when those imports are violated, including a cycle inside a package. It is a small script, not a general architecture product.
 

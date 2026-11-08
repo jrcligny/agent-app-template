@@ -14,3 +14,6 @@ export const Loading: Story = { args: { tone: "loading", title: "Loading notes",
 export const Empty: Story = { args: { tone: "empty" } };
 export const Error: Story = { args: { tone: "error", title: "Could not load notes", detail: undefined } };
 export const Success: Story = { args: { tone: "success", title: "Note added", detail: undefined } };
+export const Forbidden: Story = {
+  args: { tone: "forbidden", title: "You do not have permission to view records", detail: undefined },
+};

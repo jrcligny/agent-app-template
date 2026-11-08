@@ -1,9 +1,9 @@
+import { Link, Outlet } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Status } from "@/components/feedback/status";
 import { AppShell } from "@/components/layout/app-shell";
 import { AuthPanel } from "@/features/auth/auth-panel";
 import { HealthBadge } from "@/features/health/health-badge";
-import { NotesPage } from "@/features/notes/notes-page";
 import { authClient } from "@/lib/auth-client";
 
 export function App() {
@@ -28,11 +28,26 @@ export function App() {
           </div>
         ) : null
       }
+      nav={
+        user ? (
+          <nav aria-label="Primary" className="flex flex-wrap gap-3 text-sm">
+            <Link to="/" className="underline">
+              Dashboard
+            </Link>
+            <Link to="/records" className="underline">
+              Records
+            </Link>
+            <Link to="/notes" className="underline">
+              Notes
+            </Link>
+          </nav>
+        ) : null
+      }
     >
       {session.isPending ? <Status tone="loading" title="Checking your session" /> : null}
       {session.error ? <Status tone="error" title="Could not check your session" /> : null}
       {!session.isPending && !session.error && !user ? <AuthPanel /> : null}
-      {!session.isPending && !session.error && user ? <NotesPage /> : null}
+      {!session.isPending && !session.error && user ? <Outlet /> : null}
     </AppShell>
   );
 }
