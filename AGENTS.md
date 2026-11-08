@@ -6,6 +6,8 @@ This repository is a public template for internal applications. Do not add real 
 
 OpenSpec (`@fission-ai/openspec`, MIT) is the spec tool. The layout is the official `openspec/` tree. The project schema `agent-app` is a fork of official `spec-driven`. Do not add Spec Kit or BMAD.
 
+OpenSpec workflow skills are generated once, under `.agents/skills/<name>/SKILL.md`. Do not copy them into `.cursor/skills`, `.github/skills`, or slash-command files. Regenerate with `pnpm openspec:skills` (`openspec init --tools agents` only). Do not hand-edit the generated `SKILL.md` bodies. Cursor documents project discovery of `.agents/skills/` ([Agent Skills](https://cursor.com/docs/skills)). GitHub Copilot documents the same project path ([About agent skills](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)). This file is shared guidance. It is not itself a skill, and it does not make every other agent load `.agents/skills`.
+
 Future work uses two pull requests:
 
 1. Spec: add `openspec/changes/<name>/` with proposal, delta specs, design, and tasks. Do not archive. Do not edit `openspec/specs/`. A human reviews and merges.

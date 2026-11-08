@@ -47,6 +47,8 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Architecture
         run: pnpm check:architecture
+      - name: Skill layout
+        run: pnpm check:skills
       - name: Deploy policy
         run: pnpm check:deploy
       - name: Typecheck

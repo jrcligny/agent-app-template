@@ -1,6 +1,8 @@
 # Spec workflow
 
-OpenSpec 1.16.1 from Fission-AI is installed as an exact dev dependency. It is MIT licensed. `openspec init` created the official `openspec/` tree and the agent skills under `.agents`, `.github`, and `.cursor`. The project schema `agent-app` is `openspec schema fork spec-driven agent-app`. Requirement text still uses the official `ADDED`, `MODIFIED`, `REMOVED`, and `RENAMED` sections. A `DEPRECATED` heading is rejected by the parser.
+OpenSpec 1.16.1 from Fission-AI is installed as an exact dev dependency. It is MIT licensed. `openspec init` created the official `openspec/` tree. Workflow skills are generated only by `pnpm openspec:skills`, which runs `openspec init --tools agents`. The committed bodies are `.agents/skills/<name>/SKILL.md`. The project schema `agent-app` is `openspec schema fork spec-driven agent-app`. Requirement text still uses the official `ADDED`, `MODIFIED`, `REMOVED`, and `RENAMED` sections. A `DEPRECATED` heading is rejected by the parser.
+
+Cursor's skill documentation lists `.agents/skills/` as a project directory it loads: [Agent Skills](https://cursor.com/docs/skills). GitHub Copilot's skill documentation lists the same directory for repository skills: [About agent skills](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills). Those two statements are from the vendor docs. This template has not executed Cursor or Copilot to prove a skill was invoked. Other agents are not claimed. `AGENTS.md` is shared instructions, not a second copy of the skills and not a discovery mechanism. `pnpm check:skills` fails if another `SKILL.md` is committed or if the generated `.cursor` or `.github` skill and command copies return.
 
 ## Statuses
 

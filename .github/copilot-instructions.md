@@ -9,4 +9,4 @@ Read AGENTS.md and .github/review/README.md before changing behavior.
 - Web code calls same-origin `/api` only. Do not import the API, database, or server auth package.
 - Migrations are forward-only and run once per release, not in the API process.
 - OpenSpec is the spec tool. Do not add Spec Kit or BMAD.
-- Generated OpenSpec skills are regenerated with `pnpm exec openspec update`. Do not hand-edit them.
+- OpenSpec skills live only in `.agents/skills`. Copilot documents that path for project skills. Do not add a second copy under `.github/skills`. Regenerate with `pnpm openspec:skills`. Do not hand-edit the generated skill bodies.
