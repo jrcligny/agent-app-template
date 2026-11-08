@@ -37,6 +37,7 @@ test("VIEW-1 keeps filters in the URL and a narrow collection action stays visib
   await page.getByRole("button", { name: "Include in collection" }).focus();
   await page.keyboard.press("Enter");
   await expect(page.getByRole("status", { name: "Membership updated" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Curated record" })).toBeVisible();
   await page.screenshot({ path: path.join(artifacts, "collection-membership.png") });
 
   await page.setViewportSize({ width: 375, height: 900 });

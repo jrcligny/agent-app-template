@@ -187,6 +187,7 @@ export function RecordsPage() {
       });
       setMembershipState("success");
       setNotice({ tone: "success", title: "Membership updated" });
+      setReloadKey((value) => value + 1);
     } catch (error) {
       setMembershipState(error instanceof ApiError && error.status === 403 ? "forbidden" : "error");
       setNotice({ tone: "error", title: "That batch was not applied." });
@@ -204,6 +205,7 @@ export function RecordsPage() {
       });
       setMembershipState("success");
       setNotice({ tone: "success", title: "Membership updated" });
+      setReloadKey((value) => value + 1);
     } catch (error) {
       setMembershipState(error instanceof ApiError && error.status === 403 ? "forbidden" : "error");
       setNotice({ tone: "error", title: "That batch was not applied." });
