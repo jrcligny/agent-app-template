@@ -14,7 +14,10 @@ Tests follow behavior. There is no coverage percentage gate and no fixed test co
 | Scheduler unit | A failed tick does not stop the loop, and stop waits so a later tick does not run. |
 | Workbench component tests | Dashboard counts, table selection, drawer focus, form validation, unsaved changes, and dismissed delete. |
 | Status component test | Shared loading, empty, error, success, and forbidden names. |
-| Playwright | Account journey, validation focus, saved note, narrow viewport, second account, the workbench create and confirmed delete journey, and axe on those screens. |
+| Evidence integration | Other-account artifact ids are not found, unsafe links store nothing, a deleted record hides the file, bytes stay immutable, and `canCurate: false` blocks the write. |
+| Section tree | Keyboard expands a nested section. Text is text. Loading, empty, and error statuses are named. |
+| Wizard progress | The progressbar value text matches the visible step sentence. Next follows Back and uses content width. |
+| Playwright | Account journey, validation focus, saved note, narrow viewport, second account, the workbench create and confirmed delete journey, wizard progress on a wide and a 375px viewport, and axe on those screens. | |
 
 Playwright saves screenshots when `ARTIFACTS_DIR` is set. Axe reports rule violations it can see. It does not certify the visual design. A human still reviews the UI.
 

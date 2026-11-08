@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { ActionRow } from "@/components/ui/action-row";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/text-field";
 import { Status } from "@/components/feedback/status";
@@ -80,9 +81,11 @@ export function AuthPanel() {
             <Status tone="error" title={error} />
           </div>
         ) : null}
-        <Button type="submit" disabled={pending}>
-          {pending ? "Please wait" : mode === "sign-up" ? "Create account" : "Sign in"}
-        </Button>
+        <ActionRow label="Account actions">
+          <Button type="submit" disabled={pending}>
+            {pending ? "Please wait" : mode === "sign-up" ? "Create account" : "Sign in"}
+          </Button>
+        </ActionRow>
       </form>
     </section>
   );

@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Status } from "@/components/feedback/status";
 import { AppShell } from "@/components/layout/app-shell";
 import { AuthPanel } from "@/features/auth/auth-panel";
-import { HealthBadge } from "@/features/health/health-badge";
 import { authClient } from "@/lib/auth-client";
 
 export function App() {
@@ -12,7 +11,6 @@ export function App() {
 
   return (
     <AppShell
-      health={<HealthBadge />}
       account={
         user ? (
           <div className="flex items-center gap-3">

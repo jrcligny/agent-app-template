@@ -1,4 +1,5 @@
 import { Status } from "@/components/feedback/status";
+import { ActionRow } from "@/components/ui/action-row";
 import { Button } from "@/components/ui/button";
 import { SelectField } from "@/components/ui/select-field";
 
@@ -81,12 +82,14 @@ export function DataTable({
           <option value="title">Title A to Z</option>
           <option value="-title">Title Z to A</option>
         </SelectField>
-        {canDelete ? (
+      </div>
+      {canDelete ? (
+        <ActionRow label="Table actions">
           <Button variant="danger" disabled={selectedCount === 0} onClick={onBulkDelete}>
             Delete {selectedCount} records
           </Button>
-        ) : null}
-      </div>
+        </ActionRow>
+      ) : null}
       {rows.length === 0 ? <Status tone="empty" title={emptyTitle} detail={emptyDetail} /> : null}
       {rows.length > 0 ? (
         <div className="overflow-x-auto rounded-lg border border-line bg-surface">
@@ -145,7 +148,7 @@ export function DataTable({
           </table>
         </div>
       ) : null}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center justify-end gap-3">
         <Button variant="quiet" disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
           Previous page
         </Button>

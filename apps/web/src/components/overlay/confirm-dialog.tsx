@@ -1,3 +1,4 @@
+import { ActionRow } from "@/components/ui/action-row";
 import { Button } from "@/components/ui/button";
 import { useLayerFocus } from "./use-layer-focus";
 
@@ -33,14 +34,14 @@ export function ConfirmDialog({
           </h2>
           <p className="text-sm text-muted">{description}</p>
         </div>
-        <div className="flex flex-wrap justify-end gap-2">
+        <ActionRow label="Confirmation actions">
           <Button variant="quiet" onClick={onDismiss}>
             Cancel
           </Button>
           <Button variant="danger" onClick={onConfirm}>
             {confirmLabel}
           </Button>
-        </div>
+        </ActionRow>
       </div>
     </div>
   );

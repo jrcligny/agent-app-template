@@ -226,6 +226,44 @@ export const savedView = pgTable(
   (table) => [index("saved_view_user_idx").on(table.userId)],
 );
 
+export const recordSection = pgTable(
+  "record_section",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    recordId: uuid("record_id")
+      .notNull()
+      .references(() => record.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    parentId: uuid("parent_id"),
+    title: text("title").notNull(),
+    body: text("body").notNull(),
+    link: text("link"),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [index("record_section_record_idx").on(table.recordId)],
+);
+
+export const recordArtifact = pgTable(
+  "record_artifact",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    recordId: uuid("record_id")
+      .notNull()
+      .references(() => record.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    fileName: text("file_name").notNull(),
+    mediaType: text("media_type").notNull(),
+    byteSize: integer("byte_size").notNull(),
+    contentBase64: text("content_base64"),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
+  },
+  (table) => [index("record_artifact_record_idx").on(table.recordId)],
+);
+
 export const note = pgTable(
   "note",
   {

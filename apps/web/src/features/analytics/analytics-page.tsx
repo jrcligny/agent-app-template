@@ -1,6 +1,7 @@
 import { analyticsReportSchema, type AnalyticsReport } from "@agent-app/contracts";
 import { useState } from "react";
 import { Status } from "@/components/feedback/status";
+import { ActionRow } from "@/components/ui/action-row";
 import { Button } from "@/components/ui/button";
 import { ApiError, apiFetch } from "@/lib/api";
 import { AnalyticsChart } from "./analytics-chart";
@@ -79,10 +80,12 @@ export function AnalyticsPage() {
             <option value="UTC">UTC</option>
           </select>
         </label>
-        <Button type="submit">Apply window</Button>
-        <Button type="button" variant="quiet" onClick={() => void loadFixture()}>
-          Load labeled fixture alpha
-        </Button>
+        <ActionRow className="ml-auto" label="Analytics actions">
+          <Button type="button" variant="quiet" onClick={() => void loadFixture()}>
+            Load labeled fixture alpha
+          </Button>
+          <Button type="submit">Apply window</Button>
+        </ActionRow>
       </form>
       {phase === "loading" ? <Status tone="loading" title="Loading analytics" /> : null}
       {phase === "forbidden" ? (
@@ -95,7 +98,9 @@ export function AnalyticsPage() {
         <div className="grid gap-3">
           <p className="text-sm">Unknown</p>
           <Status tone="error" title="Could not load analytics" detail="The totals are unknown." />
-          <Button onClick={() => void load()}>Retry</Button>
+          <ActionRow>
+            <Button onClick={() => void load()}>Retry</Button>
+          </ActionRow>
         </div>
       ) : null}
       {report && (phase === "ready" || phase === "empty") ? (

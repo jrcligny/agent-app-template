@@ -36,3 +36,13 @@ A signed-in person who lacks permission to view records SHALL see a permission e
 - **THEN** the screen shows a forbidden status, no record title, and no numeric zero
 
 Trace: apps/api/src/features/records/records.integration.test.ts :: "WB-2 rejects a session that is not allowed to list records"
+
+### Requirement: SHELL-1 Header omits API status
+The signed-in header SHALL NOT show API liveness text. `GET /api/health` and `GET /api/health/ready` SHALL remain available for probes. A narrow header SHALL still show the product name.
+
+#### Scenario: Signed-in header
+- **WHEN** the header renders for a signed-in person
+- **THEN** it does not contain API status text
+- **AND** the product name and account remain visible
+
+Trace: apps/web/src/components/layout/app-shell.test.tsx :: "header does not show API status"

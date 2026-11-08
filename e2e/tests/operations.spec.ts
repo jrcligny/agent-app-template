@@ -14,6 +14,8 @@ test("WIZ-1 finishes the wizard and JOB-1 retries a failed export", async ({ pag
   await page.getByLabel("Password").fill("correct-horse-1");
   await page.getByRole("button", { name: "Create account" }).click();
   await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
+  await expect(page.locator("header")).not.toContainText(/API ok|Checking API|API unavailable/);
+  await page.screenshot({ path: path.join(artifacts, "header-desktop.png") });
 
   await page.getByRole("link", { name: "Activity", exact: true }).click();
   await expect(page.getByRole("status", { name: "No activity yet" })).toBeVisible();
@@ -21,8 +23,14 @@ test("WIZ-1 finishes the wizard and JOB-1 retries a failed export", async ({ pag
 
   await page.getByRole("link", { name: "Wizard", exact: true }).click();
   await page.getByRole("textbox", { name: "Title", exact: true }).fill("Wizard record");
+  const firstProgress = page.getByRole("progressbar");
+  await expect(firstProgress).toHaveAttribute("aria-valuenow", "1");
+  await expect(firstProgress).toHaveAttribute("aria-valuetext", "Step 1 of 3. Current step: Record title.");
+  await expect(page.getByText("Step 1 of 3. Current step: Record title.")).toBeVisible();
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByRole("combobox", { name: "Status", exact: true }).selectOption("open");
+  await assertWizardActions(page, "2", "Record status");
+  await page.screenshot({ path: path.join(artifacts, "wizard-progress-desktop.png") });
   await page.getByRole("button", { name: "Next" }).click();
   await expect(page.getByRole("heading", { name: "Review" })).toBeVisible();
   await page.screenshot({ path: path.join(artifacts, "wizard-review.png") });
@@ -46,6 +54,16 @@ test("WIZ-1 finishes the wizard and JOB-1 retries a failed export", async ({ pag
   await page.screenshot({ path: path.join(artifacts, "activity-event.png") });
 
   await page.setViewportSize({ width: 375, height: 812 });
+  await expect(page.locator("header")).not.toContainText(/API ok|Checking API|API unavailable/);
+  await page.screenshot({ path: path.join(artifacts, "header-narrow.png") });
+  await page.getByRole("link", { name: "Wizard", exact: true }).click();
+  await page.getByRole("textbox", { name: "Title", exact: true }).fill("Narrow wizard");
+  await page.getByRole("button", { name: "Next" }).click();
+  await assertWizardActions(page, "2", "Record status");
+  await page.screenshot({ path: path.join(artifacts, "wizard-progress-narrow.png"), fullPage: true });
+  await page.getByRole("button", { name: "Back" }).focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("progressbar")).toHaveAttribute("aria-valuenow", "1");
   await page.getByRole("link", { name: "Settings", exact: true }).click();
   await expect(page.getByRole("button", { name: "Save settings" })).toBeVisible();
   await page.getByLabel("Display name").fill("Ada Lovelace");
@@ -55,3 +73,29 @@ test("WIZ-1 finishes the wizard and JOB-1 retries a failed export", async ({ pag
   await page.screenshot({ path: path.join(artifacts, "settings-narrow.png") });
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });
+
+async function assertWizardActions(
+  page: import("@playwright/test").Page,
+  step: string,
+  title: string,
+) {
+  const progress = page.getByRole("progressbar");
+  await expect(progress).toHaveAttribute("aria-valuenow", step);
+  await expect(progress).toHaveAttribute("aria-valuetext", `Step ${step} of 3. Current step: ${title}.`);
+  const footer = page.getByRole("group", { name: "Wizard actions" });
+  const back = page.getByRole("button", { name: "Back" });
+  const next = page.getByRole("button", { name: "Next" });
+  const footerBox = await footer.boundingBox();
+  const backBox = await back.boundingBox();
+  const nextBox = await next.boundingBox();
+  if (!footerBox || !backBox || !nextBox) throw new Error("Wizard actions were not visible");
+  expect(nextBox.width).toBeLessThan(footerBox.width * 0.75);
+  expect(backBox.width).toBeLessThan(footerBox.width * 0.75);
+  expect(nextBox.height).toBeGreaterThanOrEqual(44);
+  expect(backBox.height).toBeGreaterThanOrEqual(44);
+  expect(nextBox.x + nextBox.width).toBeLessThanOrEqual(footerBox.x + footerBox.width + 1);
+  expect(nextBox.x + nextBox.width).toBeGreaterThan(footerBox.x + footerBox.width - 32);
+  if (backBox.y === nextBox.y) {
+    expect(backBox.x + backBox.width).toBeLessThanOrEqual(nextBox.x + 1);
+  }
+}

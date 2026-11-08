@@ -1,12 +1,10 @@
 import type { ReactNode } from "react";
 
 export function AppShell({
-  health,
   account,
   nav,
   children,
 }: {
-  health: ReactNode;
   account?: ReactNode;
   nav?: ReactNode;
   children: ReactNode;
@@ -27,7 +25,6 @@ export function AppShell({
           </div>
           <div className="flex flex-wrap items-center gap-3 text-sm">
             {nav}
-            {health}
             {account}
           </div>
         </div>

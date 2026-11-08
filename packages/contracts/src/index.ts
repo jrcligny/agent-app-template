@@ -175,6 +175,42 @@ export const saveViewSchema = z.object({
   query: viewQuerySchema,
 });
 
+export type SectionNode = {
+  id: string;
+  title: string;
+  text: string;
+  link: string | null;
+  children: SectionNode[];
+};
+
+export const sectionNodeSchema: z.ZodType<SectionNode> = z.lazy(() =>
+  z.object({
+    id: z.string().uuid(),
+    title: z.string(),
+    text: z.string(),
+    link: z.string().nullable(),
+    children: z.array(sectionNodeSchema),
+  }),
+);
+
+export const sectionListSchema = z.object({
+  sections: z.array(sectionNodeSchema),
+});
+
+export const artifactMetadataSchema = z.object({
+  id: z.string().uuid(),
+  recordId: z.string().uuid(),
+  fileName: z.string(),
+  mediaType: z.string(),
+  byteSize: z.number().int().nonnegative(),
+  createdAt: z.string().datetime(),
+  contentPath: z.string().startsWith("/api/artifacts/"),
+});
+
+export const artifactListSchema = z.object({
+  artifacts: z.array(artifactMetadataSchema),
+});
+
 export const collectionSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1).max(80),

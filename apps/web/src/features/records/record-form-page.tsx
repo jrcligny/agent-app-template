@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useBlocker, useNavigate, useParams } from "react-router";
 import { Status } from "@/components/feedback/status";
 import { ConfirmDialog } from "@/components/overlay/confirm-dialog";
+import { ActionRow } from "@/components/ui/action-row";
 import { Button } from "@/components/ui/button";
 import { SelectField } from "@/components/ui/select-field";
 import { TextField } from "@/components/ui/text-field";
@@ -178,12 +179,12 @@ export function RecordFormPage({ mode }: { mode: "create" | "edit" }) {
             onChange={(event) => update("reason", event.target.value)}
           />
         ) : null}
-        <div className="flex flex-wrap gap-3">
-          <Button type="submit">Save record</Button>
-          <Link to="/records" className="inline-flex items-center text-sm underline">
+        <ActionRow>
+          <Link to="/records" className="inline-flex min-h-11 items-center text-sm underline">
             Back to records
           </Link>
-        </div>
+          <Button type="submit">Save record</Button>
+        </ActionRow>
       </form>
       {success ? <Status tone="success" title={success} /> : null}
       {saveError ? <Status tone="error" title={saveError} /> : null}

@@ -2,6 +2,7 @@ import { recordCountsSchema, type RecordCounts } from "@agent-app/contracts";
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { Status } from "@/components/feedback/status";
+import { ActionRow } from "@/components/ui/action-row";
 import { Button } from "@/components/ui/button";
 import { ApiError, apiFetch } from "@/lib/api";
 
@@ -43,7 +44,9 @@ export function DashboardPage() {
       {phase === "error" ? (
         <div className="grid gap-3">
           <Status tone="error" title="Could not load the dashboard" detail="The counts are unknown." />
-          <Button onClick={() => void load()}>Retry</Button>
+          <ActionRow>
+            <Button onClick={() => void load()}>Retry</Button>
+          </ActionRow>
         </div>
       ) : null}
       {phase === "ready" && counts ? (

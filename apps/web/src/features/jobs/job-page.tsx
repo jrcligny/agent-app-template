@@ -2,6 +2,7 @@ import { jobListSchema, jobSchema, type Job } from "@agent-app/contracts";
 import { useEffect, useState } from "react";
 import { ProgressMeter } from "@/components/feedback/progress";
 import { Status } from "@/components/feedback/status";
+import { ActionRow } from "@/components/ui/action-row";
 import { Button } from "@/components/ui/button";
 import { SelectField } from "@/components/ui/select-field";
 import { ApiError, apiFetch } from "@/lib/api";
@@ -65,7 +66,9 @@ export function JobPage() {
     return (
       <div className="grid gap-3">
         <Status tone="error" title="Could not load jobs" />
-        <Button onClick={() => void load()}>Retry</Button>
+        <ActionRow>
+          <Button onClick={() => void load()}>Retry</Button>
+        </ActionRow>
       </div>
     );
   }
@@ -91,7 +94,9 @@ export function JobPage() {
           <option value="complete">Complete</option>
           <option value="fail">Fail</option>
         </SelectField>
-        <Button onClick={() => void start()}>Start export</Button>
+        <ActionRow className="ml-auto" label="Job actions">
+          <Button onClick={() => void start()}>Start export</Button>
+        </ActionRow>
       </div>
       {!current ? <Status tone="empty" title="No export yet" detail="Start an export to watch its progress." /> : null}
       {current ? <JobState job={current} onCancel={() => void cancel()} onRetry={() => void retry()} /> : null}
@@ -106,9 +111,11 @@ function JobState({ job, onCancel, onRetry }: { job: Job; onCancel: () => void; 
       {(job.status === "queued" || job.status === "running") && (
         <>
           <ProgressMeter value={job.progress} label="Export progress" />
-          <Button variant="danger" onClick={onCancel}>
-            Cancel job
-          </Button>
+          <ActionRow label="Job actions">
+            <Button variant="danger" onClick={onCancel}>
+              Cancel job
+            </Button>
+          </ActionRow>
         </>
       )}
       {job.status === "succeeded" ? <Status tone="success" title="Export finished" /> : null}
@@ -118,7 +125,9 @@ function JobState({ job, onCancel, onRetry }: { job: Job; onCancel: () => void; 
       {job.status === "failed" ? (
         <div className="grid gap-3">
           <Status tone="error" title="Export failed" detail="Retry starts a new attempt." />
-          <Button onClick={onRetry}>Retry export</Button>
+          <ActionRow label="Job actions">
+            <Button onClick={onRetry}>Retry export</Button>
+          </ActionRow>
         </div>
       ) : null}
     </div>

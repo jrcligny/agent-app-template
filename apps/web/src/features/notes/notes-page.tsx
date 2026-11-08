@@ -1,6 +1,7 @@
 import { noteListSchema, noteSchema, type Note } from "@agent-app/contracts";
 import { useEffect, useState, type FormEvent } from "react";
 import { Status } from "@/components/feedback/status";
+import { ActionRow } from "@/components/ui/action-row";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/text-field";
 import { ApiError, apiFetch } from "@/lib/api";
@@ -86,7 +87,9 @@ export function NotesPage() {
           value={body}
           onChange={(event) => setBody(event.target.value)}
         />
-        <Button type="submit">Add note</Button>
+        <ActionRow>
+          <Button type="submit">Add note</Button>
+        </ActionRow>
       </form>
       {feedback ? <Status tone="success" title={feedback} /> : null}
       {loadError ? <Status tone="error" title={loadError} /> : null}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router";
+import { ActionRow } from "@/components/ui/action-row";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/text-field";
 
@@ -57,13 +58,15 @@ export function CurationPanel({
           value={tagToApply}
           onChange={(event) => setTagToApply(event.target.value.toLowerCase())}
         />
-        <Button
-          onClick={() => {
-            if (tagToApply) onTag?.(tagToApply);
-          }}
-        >
-          Apply tag
-        </Button>
+        <ActionRow label="Tag actions">
+          <Button
+            onClick={() => {
+              if (tagToApply) onTag?.(tagToApply);
+            }}
+          >
+            Apply tag
+          </Button>
+        </ActionRow>
         <TextField
           id="view-name"
           label="View name"
@@ -71,19 +74,21 @@ export function CurationPanel({
           error={viewError ?? undefined}
           onChange={(event) => setViewName(event.target.value)}
         />
-        <Button
-          onClick={() => {
-            if (viewName.trim().length === 0) {
-              setViewError("Enter a view name.");
-              document.getElementById("view-name")?.focus();
-              return;
-            }
-            setViewError(null);
-            onSaveView?.(viewName.trim());
-          }}
-        >
-          Save view
-        </Button>
+        <ActionRow label="View actions">
+          <Button
+            onClick={() => {
+              if (viewName.trim().length === 0) {
+                setViewError("Enter a view name.");
+                document.getElementById("view-name")?.focus();
+                return;
+              }
+              setViewError(null);
+              onSaveView?.(viewName.trim());
+            }}
+          >
+            Save view
+          </Button>
+        </ActionRow>
       </div>
       <div className="flex flex-wrap items-end gap-3">
         <TextField
@@ -99,6 +104,7 @@ export function CurationPanel({
           error={rationaleError ?? undefined}
           onChange={(event) => setRationale(event.target.value)}
         />
+        <ActionRow className="ml-auto" label="Membership">
         <Button onClick={() => onInclude?.(collectionName)}>Include in collection</Button>
         <Button
           onClick={() => {
@@ -113,6 +119,7 @@ export function CurationPanel({
         >
           Annotate membership
         </Button>
+        </ActionRow>
       </div>
       {membershipState === "loading" ? <p role="status">Updating membership</p> : null}
       {membershipState === "forbidden" || !canCurate ? (

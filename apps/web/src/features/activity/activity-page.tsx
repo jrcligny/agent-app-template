@@ -1,6 +1,7 @@
 import { activityPageSchema, type ActivityEvent } from "@agent-app/contracts";
 import { useEffect, useState } from "react";
 import { Status } from "@/components/feedback/status";
+import { ActionRow } from "@/components/ui/action-row";
 import { Button } from "@/components/ui/button";
 import { ApiError, apiFetch } from "@/lib/api";
 
@@ -36,7 +37,9 @@ export function ActivityPage() {
       {phase === "error" ? (
         <div className="grid gap-3">
           <Status tone="error" title="Could not load activity" />
-          <Button onClick={() => void load()}>Retry</Button>
+          <ActionRow>
+            <Button onClick={() => void load()}>Retry</Button>
+          </ActionRow>
         </div>
       ) : null}
       {phase === "ready" && events.length === 0 ? (

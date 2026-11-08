@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useBlocker } from "react-router";
 import { Status } from "@/components/feedback/status";
 import { ConfirmDialog } from "@/components/overlay/confirm-dialog";
+import { ActionRow } from "@/components/ui/action-row";
 import { Button } from "@/components/ui/button";
 import { SelectField } from "@/components/ui/select-field";
 import { TextField } from "@/components/ui/text-field";
@@ -86,7 +87,9 @@ export function SettingsPage() {
           <option value="25">25</option>
           <option value="50">50</option>
         </SelectField>
-        <Button type="submit">Save settings</Button>
+        <ActionRow>
+          <Button type="submit">Save settings</Button>
+        </ActionRow>
       </form>
       {success ? <Status tone="success" title="Settings saved" /> : null}
       <ConfirmDialog

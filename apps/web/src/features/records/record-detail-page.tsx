@@ -1,6 +1,7 @@
 import { recordDetailSchema, type RecordDetail } from "@agent-app/contracts";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router";
+import { EvidencePanel } from "@/components/evidence/evidence-panel";
 import { Status } from "@/components/feedback/status";
 import { Button } from "@/components/ui/button";
 import { ApiError, apiFetch } from "@/lib/api";
@@ -93,6 +94,7 @@ export function RecordDetailPage() {
           <p>{record.reason}</p>
         </section>
       ) : null}
+      <EvidencePanel recordId={record.id} />
       <Link to="/records" className="text-sm underline">
         Back to records
       </Link>

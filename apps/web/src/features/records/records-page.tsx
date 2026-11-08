@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "react-router";
 import { CurationPanel } from "@/components/curation/curation-panel";
 import { DataTable } from "@/components/data/data-table";
 import { Status } from "@/components/feedback/status";
+import { ActionRow } from "@/components/ui/action-row";
 import { Button } from "@/components/ui/button";
 import { ApiError, apiFetch } from "@/lib/api";
 import { ConfirmDelete } from "./confirm-delete";
@@ -230,7 +231,7 @@ export function RecordsPage() {
           ) : null}
         </div>
         <div className="flex flex-wrap gap-3">
-          <Link to="/records/new" className="inline-flex rounded-md bg-accent px-3 py-2 text-sm font-medium text-accent-ink">
+          <Link to="/records/new" className="inline-flex min-h-11 items-center rounded-md bg-accent px-3 py-2 text-sm font-medium text-accent-ink">
             New record
           </Link>
           <Link to="/wizard" className="inline-flex items-center text-sm underline">
@@ -252,7 +253,9 @@ export function RecordsPage() {
       {phase === "error" ? (
         <div className="grid gap-3">
           <Status tone="error" title="Could not load records" />
-          <Button onClick={() => setReloadKey((value) => value + 1)}>Retry</Button>
+          <ActionRow>
+            <Button onClick={() => setReloadKey((value) => value + 1)}>Retry</Button>
+          </ActionRow>
         </div>
       ) : null}
       {phase === "ready" ? (
