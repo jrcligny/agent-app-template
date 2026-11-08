@@ -4,6 +4,7 @@ import type { Auth } from "./auth/create-auth.js";
 import type { Db } from "./db/types.js";
 import { registerHealthRoutes } from "./features/health/health.http.js";
 import { registerActivityRoutes } from "./features/activity/activity.http.js";
+import { registerAnalyticsRoutes } from "./features/analytics/analytics.http.js";
 import { registerJobRoutes } from "./features/jobs/jobs.http.js";
 import { registerNoteRoutes } from "./features/notes/notes.http.js";
 import { registerRecordRoutes } from "./features/records/records.http.js";
@@ -37,6 +38,7 @@ export function createApp(deps: { db: Db; auth: Auth; trustedOrigins: readonly s
   registerJobRoutes(app, deps.db, deps.auth);
   registerActivityRoutes(app, deps.db, deps.auth);
   registerSettingsRoutes(app, deps.db, deps.auth);
+  registerAnalyticsRoutes(app, deps.db, deps.auth);
   app.notFound((c) => errorJson(c, 404, "not_found", "Not found"));
   app.onError((error, c) => {
       logError("request failed", { path: c.req.path, name: error.name });

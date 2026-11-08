@@ -161,6 +161,35 @@ export const settingsSchema = z.object({
   pageSize: settingsPageSizeSchema,
 });
 
+export const analyticsTimeZoneSchema = z.enum(["UTC", "Europe/Paris"]);
+
+export const analyticsReportSchema = z.object({
+  window: z.object({
+    from: z.string().datetime(),
+    to: z.string().datetime(),
+    timeZone: analyticsTimeZoneSchema,
+  }),
+  totals: z.object({
+    count: z.number().int().nonnegative(),
+    sum: z.number().int(),
+    openCount: z.number().int().nonnegative(),
+    closedCount: z.number().int().nonnegative(),
+  }),
+  baseline: z.object({
+    from: z.string().datetime(),
+    to: z.string().datetime(),
+    observations: z.number().int().nonnegative(),
+    deltaCount: z.number().int().nullable(),
+    deltaSum: z.number().int().nullable(),
+  }),
+  countSeries: z.array(z.object({ day: z.string(), count: z.number().int().nonnegative() })),
+  valueSeries: z.array(z.object({ day: z.string(), sum: z.number().int() })),
+  statusBars: z.array(z.object({ status: recordStatusSchema, count: z.number().int().nonnegative() })),
+  categoryBars: z.array(z.object({ category: z.string(), count: z.number().int().nonnegative() })),
+  synthetic: z.literal(true),
+  fixture: z.enum(["alpha"]).nullable(),
+});
+
 export type HealthResponse = z.infer<typeof healthResponseSchema>;
 export type ReadinessResponse = z.infer<typeof readinessResponseSchema>;
 export type ErrorBody = z.infer<typeof errorBodySchema>;
@@ -182,3 +211,4 @@ export type CreateJob = z.infer<typeof createJobSchema>;
 export type ActivityEvent = z.infer<typeof activityEventSchema>;
 export type ActivityPage = z.infer<typeof activityPageSchema>;
 export type Settings = z.infer<typeof settingsSchema>;
+export type AnalyticsReport = z.infer<typeof analyticsReportSchema>;

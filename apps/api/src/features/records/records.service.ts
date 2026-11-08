@@ -24,6 +24,9 @@ export { AccessDeniedError as RecordForbiddenError } from "../../access/record-a
 export type RecordListQuery = {
   q?: string;
   status?: "open" | "closed";
+  category?: string;
+  from?: Date;
+  to?: Date;
   sort: "title" | "-title";
   page: number;
   pageSize: number;
@@ -168,6 +171,16 @@ function filters(userId: string, query: RecordListQuery): SQL | undefined {
   const parts: SQL[] = [eq(record.userId, userId)];
   if (query.status) parts.push(eq(record.status, query.status));
   if (query.q) parts.push(sql`${record.title} ILIKE ${likePattern(query.q)} ESCAPE '\\'`);
+  if (query.from || query.to || query.category) {
+    parts.push(sql`exists (
+      select 1 from observation
+      where observation.user_id = ${userId}
+        and observation.record_id = ${record.id}
+        and (${query.from ?? null}::timestamptz is null or observation.observed_at >= ${query.from ?? null})
+        and (${query.to ?? null}::timestamptz is null or observation.observed_at < ${query.to ?? null})
+        and (${query.category ?? null}::text is null or observation.category = ${query.category ?? null})
+    )`);
+  }
   return and(...parts);
 }
 

@@ -5,6 +5,11 @@ auth:
   secretKey: AUTH_SECRET
 api:
   replicaCount: 1
+  # The job loop lives in the API process. It is a demo scheduler, not a production queue.
+  # Leave this true only with replicaCount 1 and the Recreate strategy the chart enforces.
+  # Set it to false before running more than one API pod. Jobs then stay at their last saved status.
+  scheduler:
+    enabled: true
   image:
     repository: ghcr.io/example/agent-app-api
     tag: local

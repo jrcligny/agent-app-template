@@ -10,6 +10,8 @@ Tests follow behavior. There is no coverage percentage gate and no fixed test co
 | Notes integration | Real sign-up, HttpOnly cookie, untrusted origin, sign-out, owner list, cross-account 404, empty title. Disposable `slice_*` databases on localhost only. |
 | Records integration | Counts, forbidden list, filtered page, cross-account 404, closed-record validation, and atomic delete. Same disposable databases. |
 | Operations integration | Job cancel stops later success, retry creates one new attempt, activity is newest-first and owner-scoped, and a saved page size is what the next record list uses. |
+| Analytics integration | Fixture alpha totals, the Paris and UTC day buckets, a zero count versus a forbidden response, and a rejected window. |
+| Scheduler unit | A failed tick does not stop the loop, and stop waits so a later tick does not run. |
 | Workbench component tests | Dashboard counts, table selection, drawer focus, form validation, unsaved changes, and dismissed delete. |
 | Status component test | Shared loading, empty, error, success, and forbidden names. |
 | Playwright | Account journey, validation focus, saved note, narrow viewport, second account, the workbench create and confirmed delete journey, and axe on those screens. |

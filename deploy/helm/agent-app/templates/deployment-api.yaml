@@ -6,7 +6,24 @@ metadata:
     {{- include "agent-app.labels" . | nindent 4 }}
     app.kubernetes.io/component: api
 spec:
+  {{- if and .Values.api.scheduler.enabled (gt (int .Values.api.replicaCount) 1) }}
+  {{- fail "api.scheduler.enabled requires api.replicaCount 1. The in-process job scheduler is a single-process demo and a row lock does not make several API pods safe. Set api.scheduler.enabled to false before scaling; jobs stay at their last saved status." }}
+  {{- end }}
+  {{- $autoscaling := .Values.autoscaling | default dict }}
+  {{- if and .Values.api.scheduler.enabled (index $autoscaling "enabled") }}
+  {{- fail "api.scheduler.enabled cannot be combined with autoscaling. The chart does not ship an HPA for the demo scheduler." }}
+  {{- end }}
   replicas: {{ .Values.api.replicaCount }}
+  {{- if .Values.api.scheduler.enabled }}
+  strategy:
+    type: Recreate
+  {{- else }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  {{- end }}
   selector:
     matchLabels:
       app.kubernetes.io/instance: {{ .Release.Name }}
@@ -41,6 +58,8 @@ spec:
               value: "3000"
             - name: SECURE_COOKIES
               value: "true"
+            - name: JOB_SCHEDULER
+              value: {{ .Values.api.scheduler.enabled | quote }}
             - name: BETTER_AUTH_URL
               value: {{ .Values.api.env.betterAuthUrl | quote }}
             - name: TRUSTED_ORIGINS

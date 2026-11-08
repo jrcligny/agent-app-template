@@ -29,6 +29,7 @@ export type AppEnv = {
   authBaseUrl: string;
   trustedOrigins: string[];
   secureCookies: boolean;
+  jobScheduler: boolean;
 };
 
 export function parseEnv(source: Record<string, string | undefined>): AppEnv {
@@ -39,6 +40,7 @@ export function parseEnv(source: Record<string, string | undefined>): AppEnv {
   const authBaseUrl = z.string().url().parse(source.BETTER_AUTH_URL);
   const trustedOrigins = parseOrigins(source.TRUSTED_ORIGINS ?? "");
   const secureCookies = parseSecureCookies(source.SECURE_COOKIES, nodeEnv);
+  const jobScheduler = parseJobScheduler(source.JOB_SCHEDULER);
   const errors: string[] = [];
 
   let baseOrigin = "";
@@ -92,6 +94,7 @@ export function parseEnv(source: Record<string, string | undefined>): AppEnv {
     authBaseUrl,
     trustedOrigins,
     secureCookies,
+    jobScheduler,
   };
 }
 
@@ -107,6 +110,14 @@ export function parseDatabaseUrl(source: Record<string, string | undefined>): st
 export function usesLocalDatabasePassword(databaseUrl: string): boolean {
   const password = decodeURIComponent(new URL(databaseUrl).password);
   return LOCAL_DATABASE_PASSWORDS.has(password.toLowerCase());
+}
+
+function parseJobScheduler(value: string | undefined): boolean {
+  if (value === undefined || value === "") return true;
+  if (value !== "true" && value !== "false") {
+    throw new Error("JOB_SCHEDULER must be true or false");
+  }
+  return value === "true";
 }
 
 function parseSecureCookies(value: string | undefined, nodeEnv: NodeEnv): boolean {

@@ -7,6 +7,7 @@ import { RecordFormPage } from "./features/records/record-form-page";
 import { RecordsPage } from "./features/records/records-page";
 import { NotesPage } from "./features/notes/notes-page";
 import { ActivityPage } from "./features/activity/activity-page";
+import { AnalyticsPage } from "./features/analytics/analytics-page";
 import { JobPage } from "./features/jobs/job-page";
 import { SettingsPage } from "./features/settings/settings-page";
 import { RecordWizard } from "./features/wizard/record-wizard";
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       { path: "jobs", element: <JobPage /> },
       { path: "activity", element: <ActivityPage /> },
       { path: "settings", element: <SettingsPage /> },
+      { path: "analytics", element: <AnalyticsPage /> },
     ],
   },
 ]);

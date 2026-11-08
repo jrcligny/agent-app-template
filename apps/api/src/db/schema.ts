@@ -132,6 +132,26 @@ export const job = pgTable(
   (table) => [index("job_user_id_idx").on(table.userId)],
 );
 
+export const observation = pgTable(
+  "observation",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    recordId: uuid("record_id").references(() => record.id, { onDelete: "set null" }),
+    fixtureKey: text("fixture_key"),
+    category: text("category").notNull(),
+    status: text("status").notNull(),
+    value: integer("value").notNull(),
+    observedAt: timestamp("observed_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [
+    index("observation_user_observed_idx").on(table.userId, table.observedAt),
+    index("observation_user_fixture_idx").on(table.userId, table.fixtureKey),
+  ],
+);
+
 export const note = pgTable(
   "note",
   {

@@ -52,6 +52,9 @@ export function App() {
             <Link to="/settings" className="underline">
               Settings
             </Link>
+            <Link to="/analytics" className="underline">
+              Analytics
+            </Link>
           </nav>
         ) : null
       }

@@ -81,6 +81,7 @@ jobs:
             echo "chart rendered without required secret and origin settings"
             exit 1
           fi
+          node scripts/check-helm-scheduler.mjs
 
   images:
     runs-on: ubuntu-latest

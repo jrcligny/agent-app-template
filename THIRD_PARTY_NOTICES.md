@@ -6,4 +6,6 @@ Dependencies installed from npm keep their own licenses. They are not relicensed
 
 UI components in `apps/web/src/components` are original code in this repository. They follow the practice of keeping components in the repo rather than depending on a component package at runtime. They are not a copy of the shadcn registry. shadcn/ui itself is MIT.
 
+Charts use `recharts` 3.10.1, MIT, copyright 2015-present recharts. The package license is the MIT text in that published package. Its own dependencies keep their licenses. The focusable bars, point links, and data table in this repo are original code. Color is not the only label.
+
 Container base images `node` and `nginxinc/nginx-unprivileged` are third-party and remain under their own licenses. PostgreSQL and Helm are third-party tools used to run and render the template.

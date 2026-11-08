@@ -18,6 +18,9 @@ export function RecordsPage() {
   const sort = params.get("sort") === "-title" ? "-title" : "title";
   const page = positive(params.get("page"));
   const drawerId = params.get("drawer");
+  const category = params.get("category") ?? "";
+  const from = params.get("from") ?? "";
+  const to = params.get("to") ?? "";
   const [reloadKey, setReloadKey] = useState(0);
   const [phase, setPhase] = useState<Phase>("loading");
   const [rows, setRows] = useState<WorkbenchRecord[]>([]);
@@ -46,6 +49,9 @@ export function RecordsPage() {
     const search = new URLSearchParams({ sort, page: String(page) });
     if (query) search.set("q", query);
     if (status) search.set("status", status);
+    if (category) search.set("category", category);
+    if (from) search.set("from", from);
+    if (to) search.set("to", to);
     void apiFetch(`/api/records?${search.toString()}`, (value) => recordPageSchema.parse(value))
       .then((result) => {
         if (cancelled) return;
@@ -63,7 +69,7 @@ export function RecordsPage() {
     return () => {
       cancelled = true;
     };
-  }, [query, status, sort, page, reloadKey]);
+  }, [query, status, category, from, to, sort, page, reloadKey]);
 
   useEffect(() => {
     if (!drawerId) return;
@@ -114,6 +120,14 @@ export function RecordsPage() {
             Records
           </h1>
           <p className="text-sm text-muted">Search, filter, and page only the records on your account.</p>
+          {from || category ? (
+            <p className="text-sm">
+              Chart filters: {status || "any status"}
+              {category ? `, category ${category}` : ""}
+              {from ? `, from ${from}` : ""}
+              {to ? ` to ${to}` : ""}.
+            </p>
+          ) : null}
         </div>
         <div className="flex flex-wrap gap-3">
           <Link to="/records/new" className="inline-flex rounded-md bg-accent px-3 py-2 text-sm font-medium text-accent-ink">

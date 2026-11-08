@@ -5,6 +5,7 @@ import { createAuth } from "./auth/create-auth.js";
 import { createApp } from "./app.js";
 import * as schema from "./db/schema.js";
 import { parseEnv } from "./env.js";
+import { startJobScheduler } from "./jobs/scheduler.js";
 import { advanceJobs } from "./jobs/worker.js";
 import { logError, logInfo } from "./logger.js";
 
@@ -18,16 +19,22 @@ const auth = createAuth(db, env);
 const app = createApp({ db, auth, trustedOrigins: env.trustedOrigins });
 
 let jobTableReady = false;
-const jobTimer = setInterval(() => {
-  void advanceJobs(db)
-    .then(() => {
-      jobTableReady = true;
-    })
-    .catch((error: unknown) => {
-      if (!jobTableReady && errorText(error).includes("does not exist")) return;
-      logError("job advance failed", { name: error instanceof Error ? error.name : "unknown" });
-    });
-}, 300);
+const jobScheduler = startJobScheduler({
+  enabled: env.jobScheduler,
+  advance: async () => {
+    await advanceJobs(db);
+    jobTableReady = true;
+  },
+  onError: (error) => {
+    if (!jobTableReady && errorText(error).includes("does not exist")) return;
+    logError("job advance failed", { name: error instanceof Error ? error.name : "unknown" });
+  },
+});
+if (env.jobScheduler) {
+  logInfo("job scheduler enabled for this single process");
+} else {
+  logInfo("job scheduler disabled; jobs stay at their last saved status");
+}
 
 function errorText(error: unknown): string {
   const parts: string[] = [];
@@ -51,7 +58,7 @@ let shuttingDown = false;
 async function shutdown(signal: string): Promise<void> {
   if (shuttingDown) return;
   shuttingDown = true;
-  clearInterval(jobTimer);
+  await jobScheduler.stop();
   logInfo("shutting down", { signal });
   await new Promise<void>((resolve, reject) => {
     server.close((error) => (error ? reject(error) : resolve()));
