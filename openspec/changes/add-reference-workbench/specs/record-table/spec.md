@@ -20,7 +20,7 @@ The table SHALL accept a text search, a status filter, a sort, and a page size, 
 Trace: apps/api/src/features/records/records.integration.test.ts :: "TBL-1 returns the caller's filtered sorted page"
 
 ### Requirement: TBL-2 Selection and bulk delete
-The table SHALL let the keyboard select rows and SHALL NOT delete them until a confirmation succeeds.
+The table SHALL let the keyboard select rows and SHALL NOT delete them until confirmation succeeds. The delete itself follows CFM-1, including the rule that a mixed set deletes nothing.
 
 #### Scenario: Selection
 - **WHEN** the user toggles a row from the keyboard

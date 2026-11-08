@@ -1,0 +1,6 @@
+schema: agent-app
+created: 2026-11-08
+x-ui: true
+x-human-approval: pending
+x-depends-on: add-reference-workbench
+x-spec-revision: sha256:b544bea467a5a6c1d3eae2312ef52ae0a16ec77e9c33da04e958c0740ac92e9f

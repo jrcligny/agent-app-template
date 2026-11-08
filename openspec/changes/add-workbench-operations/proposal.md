@@ -38,6 +38,14 @@ After the MVP exists, a person starts a wizard, cannot skip an invalid step, and
 
 Loading, empty, error, and success apply to activity, jobs, and settings. Validation blocks the wizard step. Permission failures show a forbidden state. Keyboard and focus work for next, back, cancel, and retry. A narrow viewport keeps the current step's primary action visible.
 
+## Approval
+
+`x-human-approval` is `pending` for this change only. Merging the pull request does not approve it. The spec check does not treat `pending` as failure and does not prove a human decision.
+
 ## Breaking changes
 
 None.
+
+## What changed in this revision
+
+This increment stays the operations slice. Analytics, curation, evidence, snapshots, comparison, and hierarchy are not folded into it.

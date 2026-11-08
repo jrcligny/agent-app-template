@@ -14,4 +14,4 @@
 ## Workflow follow-up
 
 - Do not archive from the spec pull request.
-- Do not start `add-workbench-operations` until this change is delivered.
+- Do not start a later increment until this change is delivered and a human has accepted that later change on its own.

@@ -35,7 +35,7 @@ The bootstrap notes slice proves auth and one resource. A reference workbench sh
 
 ## User journey
 
-A signed-in person opens the dashboard, sees how many records are open, and goes to the table. They search, filter, sort, and page. They select rows and must confirm before bulk delete. They open a drawer for a short summary and a full page for the long body. They create a record, edit it, and get stopped if they leave with unsaved changes. A person without access sees a forbidden state and no rows.
+A signed-in person opens the dashboard and sees two labeled counts: every record they can read, and how many of those are open. Zero means that defined set is empty. A failed request does not show zero. They open the matching table, search, filter, sort, and page. They select rows and must confirm before bulk delete. If the set mixes in a record they do not own, nothing in the set is deleted. They open a drawer for a short summary and a full page for the long body. They create a record, edit it, and get stopped if they leave with unsaved changes. A person without permission sees a forbidden state, not an empty list.
 
 ## UI acceptance
 
@@ -45,6 +45,22 @@ Every screen in this change has loading, empty, error, and success. Validation e
 
 None.
 
+## Approval
+
+`x-human-approval` is `pending` for this change only. Merging the pull request does not change that field and does not approve the other changes in the same pull request. A human records acceptance on this change after review. The spec check rejects a self-approval value. It does not prove a human approved, and a `pending` value does not fail that check.
+
 ## Later increments
 
-Wizard, async progress, activity history, and settings are specified separately in `add-workbench-operations`. They are not part of this change and are not a reason to implement them now.
+These are separate changes in the same pull request. None of them is part of this MVP:
+
+- `add-workbench-operations`: wizard, job, activity, settings.
+- `add-workbench-analytics`: defined counters, charts, and drill-through.
+- `add-workbench-curation`: tags, saved views, collections, bulk membership.
+- `add-workbench-evidence`: structured sections and artifacts.
+- `add-workbench-snapshots`: immutable published membership.
+- `add-workbench-comparison`: time windows and side-by-side diff.
+- `add-workbench-hierarchy`: parent and child navigation.
+
+## What changed in this revision
+
+The dashboard no longer uses one unlabeled count. Bulk delete is all or nothing. Forbidden is distinct from zero records.

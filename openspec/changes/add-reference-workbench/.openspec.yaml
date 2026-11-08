@@ -3,4 +3,4 @@ created: 2026-11-07
 x-ui: true
 x-human-approval: pending
 x-depends-on: bootstrap-branch
-x-spec-revision: sha256:a1151a7d79e9f980fa7bfb7e0304ff2cc5631aa76e4fb7b5000967d4cdd189a4
+x-spec-revision: sha256:582858034806b38040b22ead7880e223cd77ca06c48ab9d158a88523587a70e4

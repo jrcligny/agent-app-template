@@ -3,4 +3,4 @@ created: 2026-11-07
 x-ui: true
 x-human-approval: pending
 x-depends-on: add-reference-workbench
-x-spec-revision: sha256:484bf1b7cd75f651c3ce93af7f48c3b2a5145f8b4f1917c3c397ad8e48ba9d5d
+x-spec-revision: sha256:258861797719c98a43aea1aaaec35b18e43bcf1707b60914850c83e8989cf038

@@ -14,7 +14,8 @@ See proposal.md. The bootstrap app already has sessions, tokens, Button, TextFie
 
 **Non-Goals:**
 
-- Wizard, background jobs, activity history, and settings. See `add-workbench-operations`.
+- Charts, saved views, collections, artifacts, snapshots, and hierarchy. Those are later changes.
+- Wizard, jobs, activity, and settings. See `add-workbench-operations`.
 - Real organization data, SSO, or a new auth system.
 - Implementing this change in the spec pull request.
 
@@ -24,6 +25,8 @@ See proposal.md. The bootstrap app already has sessions, tokens, Button, TextFie
 - The table is server-paged. Search, status filter, and sort are query parameters so the tests can assert them without a browser.
 - The drawer is a route state on the table page. The long body lives at `/records/:id`.
 - Closed status requires a reason. The form asks before navigation when fields differ from the last save.
+- The dashboard counts are defined queries, not chart series. "All" means every record the caller can read. "Open" means status open inside that set. Failure is unknown, not zero. Lacking permission is forbidden, not zero.
+- Bulk delete is one transaction. Any id that is missing or not owned rejects the whole set. The client must not drop those ids quietly and delete the rest.
 - Bulk delete and single delete both use ConfirmDialog.
 
 ## Risks / Trade-offs
