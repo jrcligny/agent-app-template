@@ -18,6 +18,7 @@ const services = [
   "apps/api/src/snapshots/store.ts",
   "apps/api/src/comparison/compare.ts",
   "apps/api/src/comparison/diff.ts",
+  "apps/api/src/hierarchy/path.ts",
 ];
 
 const surfaces = [

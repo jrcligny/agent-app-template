@@ -1,5 +1,6 @@
 import { coverageSchema, draftCollectionListSchema, draftDetailSchema, snapshotDiffSchema, snapshotListSchema, snapshotSchema, windowDiffSchema } from "@agent-app/contracts";
 import { useEffect, useState, type FormEvent } from "react";
+import { Link } from "react-router";
 import { DiffTable, type DiffRow, type ProvenanceRow } from "@/components/comparison/diff-table";
 import { CoverageTable, type CoverageReport } from "@/components/snapshots/coverage-table";
 import { Status } from "@/components/feedback/status";
@@ -257,6 +258,20 @@ export function SnapshotsPage() {
             ))}
           </ul>
           <CoverageTable phase={coveragePhase} report={coverage} />
+        </div>
+      ) : null}
+      {draft && snapshots.length > 0 ? (
+        <div className="grid gap-2">
+          <h2 className="text-lg font-semibold">Open a snapshot</h2>
+          <ul className="grid gap-2">
+            {snapshots.map((item) => (
+              <li key={item.id}>
+                <Link className="text-sm font-medium underline" to={`/collections/${draft.id}?snapshot=${item.id}`}>
+                  Open {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
       ) : null}
       {snapshots.length > 0 ? (

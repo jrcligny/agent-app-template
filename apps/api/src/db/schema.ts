@@ -298,6 +298,23 @@ export const snapshotMember = pgTable(
   (table) => [primaryKey({ columns: [table.snapshotId, table.recordId] })],
 );
 
+export const snapshotAttempt = pgTable(
+  "snapshot_attempt",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    snapshotId: uuid("snapshot_id")
+      .notNull()
+      .references(() => snapshot.id, { onDelete: "cascade" }),
+    recordId: uuid("record_id").notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    label: text("label").notNull(),
+    attemptedAt: timestamp("attempted_at", { withTimezone: true, mode: "date" }).notNull(),
+  },
+  (table) => [index("snapshot_attempt_item_idx").on(table.snapshotId, table.recordId)],
+);
+
 export const snapshotTarget = pgTable(
   "snapshot_target",
   {

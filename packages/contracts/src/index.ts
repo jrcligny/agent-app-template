@@ -248,6 +248,36 @@ export const snapshotListSchema = z.object({
   snapshots: z.array(snapshotSummarySchema),
 });
 
+export const hierarchyAttemptSchema = z.object({
+  id: z.string().uuid(),
+  label: z.string().min(1),
+  attemptedAt: z.string().datetime(),
+});
+
+export const hierarchyItemSchema = z.object({
+  id: z.string().uuid(),
+  title: z.string(),
+  status: recordStatusSchema,
+  category: z.string(),
+  attempts: z.array(hierarchyAttemptSchema),
+});
+
+export const hierarchySnapshotSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  revision: z.number().int().positive(),
+});
+
+export const hierarchySchema = z.object({
+  collection: z.object({ id: z.string().uuid(), name: z.string() }),
+  snapshots: z.array(hierarchySnapshotSchema),
+  snapshot: hierarchySnapshotSchema.nullable(),
+  items: z.array(hierarchyItemSchema.omit({ attempts: true })),
+  item: hierarchyItemSchema.nullable(),
+  attempt: hierarchyAttemptSchema.nullable(),
+  status: z.enum(["open", "closed", ""]),
+});
+
 export const diffRowSchema = z.object({
   id: z.string(),
   kind: z.enum(["added", "removed", "changed"]),
