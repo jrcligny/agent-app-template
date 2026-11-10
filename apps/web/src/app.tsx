@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router";
+import { NavLink, Outlet } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Status } from "@/components/feedback/status";
 import { AppShell } from "@/components/layout/app-shell";
@@ -13,8 +13,8 @@ export function App() {
     <AppShell
       account={
         user ? (
-          <div className="flex items-center gap-3">
-            <p>{user.email}</p>
+          <div className="flex min-w-0 items-center gap-2">
+            <p className="max-w-28 truncate sm:max-w-56">{user.email}</p>
             <Button
               variant="quiet"
               onClick={() => {
@@ -28,34 +28,15 @@ export function App() {
       }
       nav={
         user ? (
-          <nav aria-label="Primary" className="flex flex-wrap gap-3 text-sm">
-            <Link to="/" className="underline">
+          <nav aria-label="Primary" className="flex flex-wrap gap-x-3 gap-y-1 text-sm">
+            <PrimaryLink to="/" end>
               Dashboard
-            </Link>
-            <Link to="/records" className="underline">
-              Records
-            </Link>
-            <Link to="/notes" className="underline">
-              Notes
-            </Link>
-            <Link to="/wizard" className="underline">
-              Wizard
-            </Link>
-            <Link to="/jobs" className="underline">
-              Jobs
-            </Link>
-            <Link to="/activity" className="underline">
-              Activity
-            </Link>
-            <Link to="/settings" className="underline">
-              Settings
-            </Link>
-            <Link to="/analytics" className="underline">
-              Analytics
-            </Link>
-            <Link to="/snapshots" className="underline">
-              Snapshots
-            </Link>
+            </PrimaryLink>
+            <PrimaryLink to="/records">Records</PrimaryLink>
+            <PrimaryLink to="/collections">Collections</PrimaryLink>
+            <PrimaryLink to="/analytics">Analytics</PrimaryLink>
+            <PrimaryLink to="/activity">Activity</PrimaryLink>
+            <PrimaryLink to="/settings">Settings</PrimaryLink>
           </nav>
         ) : null
       }
@@ -65,5 +46,17 @@ export function App() {
       {!session.isPending && !session.error && !user ? <AuthPanel /> : null}
       {!session.isPending && !session.error && user ? <Outlet /> : null}
     </AppShell>
+  );
+}
+
+function PrimaryLink({ to, end, children }: { to: string; end?: boolean; children: string }) {
+  return (
+    <NavLink
+      to={to}
+      end={end}
+      className={({ isActive }) => (isActive ? "font-semibold underline decoration-accent" : "underline decoration-accent")}
+    >
+      {children}
+    </NavLink>
   );
 }

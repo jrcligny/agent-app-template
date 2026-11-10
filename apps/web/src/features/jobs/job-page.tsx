@@ -76,8 +76,13 @@ export function JobPage() {
   return (
     <section className="grid gap-6" aria-labelledby="jobs-heading">
       <div className="grid gap-2">
+        <nav aria-label="Breadcrumb" className="text-sm">
+          <a href="/records">Records</a>
+          <span aria-hidden="true"> / </span>
+          <span>Export</span>
+        </nav>
         <h1 id="jobs-heading" className="text-2xl font-semibold">
-          Export job
+          Export
         </h1>
         <p className="text-sm text-muted">
           This demo updates a saved job from this API process. It is not a durable multi-server queue. Choose a

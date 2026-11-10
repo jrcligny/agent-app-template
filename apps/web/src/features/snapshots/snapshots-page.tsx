@@ -99,9 +99,9 @@ export function SnapshotsPage() {
   return (
     <section className="grid gap-6" aria-labelledby="snapshots-heading">
       <div className="grid gap-2">
-        <h1 id="snapshots-heading" className="text-2xl font-semibold">Snapshots</h1>
+        <h1 id="snapshots-heading" className="text-2xl font-semibold">Collections</h1>
         <p className="text-sm text-muted">
-          A draft collection stays editable. A published snapshot keeps the titles, statuses, and categories from that moment.
+          A collection stays editable. Publishing freezes the titles, statuses, and categories from that moment.
         </p>
       </div>
       {phase === "loading" ? <Status tone="loading" title="Loading drafts" /> : null}

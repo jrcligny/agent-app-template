@@ -131,6 +131,11 @@ export function RecordFormPage({ mode }: { mode: "create" | "edit" }) {
   return (
     <section className="grid gap-6" aria-labelledby="record-form-heading">
       <div className="grid gap-2">
+        <nav aria-label="Breadcrumb" className="text-sm">
+          <a href="/records">Records</a>
+          <span aria-hidden="true"> / </span>
+          <span>{mode === "create" ? "Full form" : "Edit record"}</span>
+        </nav>
         <h1 id="record-form-heading" className="text-2xl font-semibold">
           {mode === "create" ? "New record" : "Edit record"}
         </h1>

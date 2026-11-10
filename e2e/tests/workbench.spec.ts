@@ -23,7 +23,7 @@ test("WB-1 creates a record, confirms delete, and stays usable when narrow", asy
 
   await page.getByRole("link", { name: "Records", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Records" })).toBeVisible();
-  await page.getByRole("link", { name: "New record" }).click();
+  await page.getByRole("link", { name: "Full form" }).click();
   await expect(page.getByRole("heading", { name: "New record" })).toBeVisible();
   await page.screenshot({ path: path.join(artifacts, "record-form.png") });
 

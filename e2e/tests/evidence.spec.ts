@@ -14,7 +14,7 @@ test("SEC-1 shows a section as text and a file on a narrow screen", async ({ pag
   await page.getByLabel("Password").fill("correct-horse-1");
   await page.getByRole("button", { name: "Create account" }).click();
   await page.getByRole("link", { name: "Records", exact: true }).click();
-  await page.getByRole("link", { name: "New record" }).click();
+  await page.getByRole("link", { name: "Full form" }).click();
   await page.getByLabel("Title").fill("Evidence record");
   await page.getByRole("button", { name: "Save record" }).click();
   await expect(page.getByRole("heading", { name: "Evidence record" })).toBeVisible();

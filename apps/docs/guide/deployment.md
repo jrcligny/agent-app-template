@@ -15,5 +15,6 @@ The Helm chart `deploy/helm/agent-app` creates two Deployments and a migrate Job
 - Cloud OIDC is provider-specific and is not wired. A human would add their own workflow, for example AWS `sts:AssumeRoleWithWebIdentity`, Google Workload Identity, or Azure federated credentials, using a role they create. Do not invent account ids or claim those roles exist.
 - Pull requests do not receive `id-token: write`.
 - GitHub Pages workflow deploys only after a push to `main`, and only if a human has set Pages to GitHub Actions. As of bootstrap, Pages was disabled (`has_pages: false`).
+- Storybook is built by `pnpm build` and uploaded as the `storybook` artifact on the CI checks job. It is not deployed. When Pages is enabled, a later change can upload `apps/web/storybook-static` beside the VitePress site, for example under `/agent-app-template/storybook/`, using the same Pages workflow. That publish step is intentionally not enabled here.
 
 Action SHAs were taken from each repository's release tag and checked against that tag's commit. Re-check them when upgrading.

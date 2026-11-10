@@ -23,6 +23,11 @@ export function WizardFrame({
   const progress = total > 0 ? Math.round((step / total) * 100) : 0;
   return (
     <section className="grid gap-6" aria-labelledby="wizard-heading">
+      <nav aria-label="Breadcrumb" className="text-sm">
+        <a href="/records">Records</a>
+        <span aria-hidden="true"> / </span>
+        <span>New record</span>
+      </nav>
       <div className="grid gap-2">
         <p id="wizard-progress-label" className="text-sm text-muted">
           {stepText}

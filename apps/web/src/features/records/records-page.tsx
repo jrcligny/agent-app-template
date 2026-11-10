@@ -231,11 +231,14 @@ export function RecordsPage() {
           ) : null}
         </div>
         <div className="flex flex-wrap gap-3">
-          <Link to="/records/new" className="inline-flex min-h-11 items-center rounded-md bg-accent px-3 py-2 text-sm font-medium text-accent-ink">
+          <Link to="/records/new/guided" className="inline-flex min-h-11 items-center rounded-md border-2 border-focus bg-accent px-3 py-2 text-sm font-medium text-accent-ink">
             New record
           </Link>
-          <Link to="/wizard" className="inline-flex items-center text-sm underline">
-            Guided wizard
+          <Link to="/records/new" className="inline-flex min-h-11 items-center text-sm underline">
+            Full form
+          </Link>
+          <Link to="/records/export" className="inline-flex min-h-11 items-center text-sm underline">
+            Export
           </Link>
         </div>
       </div>

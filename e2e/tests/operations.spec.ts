@@ -21,7 +21,8 @@ test("WIZ-1 finishes the wizard and JOB-1 retries a failed export", async ({ pag
   await expect(page.getByRole("status", { name: "No activity yet" })).toBeVisible();
   await page.screenshot({ path: path.join(artifacts, "activity-empty.png") });
 
-  await page.getByRole("link", { name: "Wizard", exact: true }).click();
+  await page.getByRole("link", { name: "Records", exact: true }).click();
+  await page.getByRole("link", { name: "New record" }).click();
   await page.getByRole("textbox", { name: "Title", exact: true }).fill("Wizard record");
   const firstProgress = page.getByRole("progressbar");
   await expect(firstProgress).toHaveAttribute("aria-valuenow", "1");
@@ -39,7 +40,8 @@ test("WIZ-1 finishes the wizard and JOB-1 retries a failed export", async ({ pag
   await expect(page.getByRole("status", { name: "Record created" })).toBeVisible();
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 
-  await page.getByRole("link", { name: "Jobs", exact: true }).click();
+  await page.getByRole("link", { name: "Records", exact: true }).click();
+  await page.getByRole("link", { name: "Export" }).click();
   await page.getByLabel("Simulated result").selectOption("fail");
   await page.getByRole("button", { name: "Start export" }).click();
   await expect(page.getByRole("alert", { name: "Export failed" })).toBeVisible({ timeout: 10_000 });
@@ -56,7 +58,8 @@ test("WIZ-1 finishes the wizard and JOB-1 retries a failed export", async ({ pag
   await page.setViewportSize({ width: 375, height: 812 });
   await expect(page.locator("header")).not.toContainText(/API ok|Checking API|API unavailable/);
   await page.screenshot({ path: path.join(artifacts, "header-narrow.png") });
-  await page.getByRole("link", { name: "Wizard", exact: true }).click();
+  await page.getByRole("link", { name: "Records", exact: true }).click();
+  await page.getByRole("link", { name: "New record" }).click();
   await page.getByRole("textbox", { name: "Title", exact: true }).fill("Narrow wizard");
   await page.getByRole("button", { name: "Next" }).click();
   await assertWizardActions(page, "2", "Record status");

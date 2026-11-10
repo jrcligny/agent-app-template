@@ -21,7 +21,7 @@ test("NOTES-4 shows an empty list then the saved note", async ({ page }) => {
   await page.getByLabel("Password").fill("correct-horse-1");
   await page.getByRole("button", { name: "Create account" }).click();
   await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
-  await page.getByRole("link", { name: "Notes" }).click();
+  await page.goto("/notes");
   await expect(page.getByRole("heading", { name: "Your notes" })).toBeVisible();
   await expect(page.getByRole("status", { name: "No notes yet" })).toBeVisible();
   await page.screenshot({ path: path.join(artifacts, "notes-empty.png") });
@@ -73,6 +73,6 @@ async function signUp(page: Page, email: string) {
   await page.getByLabel("Password").fill("correct-horse-1");
   await page.getByRole("button", { name: "Create account" }).click();
   await expect(page.getByRole("heading", { name: "Dashboard" })).toBeVisible();
-  await page.getByRole("link", { name: "Notes" }).click();
+  await page.goto("/notes");
   await expect(page.getByRole("heading", { name: "Your notes" })).toBeVisible();
 }

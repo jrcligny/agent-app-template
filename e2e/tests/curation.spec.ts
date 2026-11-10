@@ -14,7 +14,7 @@ test("VIEW-1 keeps filters in the URL and a narrow collection action stays visib
   await page.getByLabel("Password").fill("correct-horse-1");
   await page.getByRole("button", { name: "Create account" }).click();
   await page.getByRole("link", { name: "Records", exact: true }).click();
-  await page.getByRole("link", { name: "New record" }).click();
+  await page.getByRole("link", { name: "Full form" }).click();
   await page.getByLabel("Title").fill("Curated record");
   await page.getByRole("button", { name: "Save record" }).click();
   await expect(page.getByRole("heading", { name: "Curated record" })).toBeVisible();

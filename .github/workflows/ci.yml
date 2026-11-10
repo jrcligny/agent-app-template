@@ -57,12 +57,22 @@ jobs:
         run: pnpm lint
       - name: Tests
         run: pnpm test
+      - name: English copy
+        run: pnpm check:english
+      - name: Spec coverage
+        run: pnpm check:spec-coverage
       - name: OpenSpec
         run: pnpm openspec:validate
       - name: Spec workflow
         run: pnpm check:specs
       - name: Build
         run: pnpm build
+      - name: Upload Storybook
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: storybook
+          path: apps/web/storybook-static
+          if-no-files-found: error
       - name: Install Playwright
         run: pnpm --filter @agent-app/e2e exec playwright install --with-deps chromium
       - name: End-to-end

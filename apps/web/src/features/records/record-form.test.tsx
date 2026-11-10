@@ -19,7 +19,9 @@ it("FRM-1 focuses the reason field when a closed record has no reason", () => {
 it("FRM-2 asks before leaving unsaved edits", () => {
   renderForm();
   fireEvent.change(screen.getByLabelText("Title"), { target: { value: "Draft" } });
-  fireEvent.click(screen.getByRole("link", { name: "Records" }));
+  const recordsLink = screen.getAllByRole("link", { name: "Records" })[0];
+  if (!recordsLink) throw new Error("Missing Records link");
+  fireEvent.click(recordsLink);
   expect(screen.getByRole("dialog", { name: "Leave without saving?" })).toBeTruthy();
   expect(screen.queryByRole("heading", { name: "Record list" })).toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Leave page" }));

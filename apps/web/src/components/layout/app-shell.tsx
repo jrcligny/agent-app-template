@@ -24,10 +24,12 @@ export function AppShell({
             <p className="text-lg font-semibold">Workbench</p>
             <p className="text-sm text-muted">Synthetic records for people with an account.</p>
           </div>
-          <div className="flex flex-wrap items-center gap-3 text-sm">
+          <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 text-sm">
             {nav}
-            <ThemeSwitch />
-            {account}
+            <div className="ml-auto flex min-w-0 items-center gap-2">
+              <ThemeSwitch />
+              {account}
+            </div>
           </div>
         </div>
       </header>

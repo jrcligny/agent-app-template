@@ -25,7 +25,7 @@ test("SNP-1 publishes a draft and COV-1 lists only the missing target category",
   await page.getByRole("button", { name: "Include in collection" }).click();
   await expect(page.getByRole("status", { name: "Membership updated" })).toBeVisible();
 
-  await page.getByRole("link", { name: "Snapshots", exact: true }).click();
+  await page.getByRole("link", { name: "Collections", exact: true }).click();
   await page.getByRole("button", { name: "Release" }).click();
   await expect(page.getByRole("heading", { name: "Draft" })).toBeVisible();
   await expect(page.getByText("Fixture alpha open early")).toBeVisible();

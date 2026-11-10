@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 import { App } from "./app";
 import { RecordDetailPage } from "./features/records/record-detail-page";
 import { RecordFormPage } from "./features/records/record-form-page";
@@ -28,15 +28,18 @@ const router = createBrowserRouter([
       { index: true, element: <DashboardPage /> },
       { path: "records", element: <RecordsPage /> },
       { path: "records/new", element: <RecordFormPage mode="create" /> },
+      { path: "records/new/guided", element: <RecordWizard /> },
+      { path: "records/export", element: <JobPage /> },
       { path: "records/:id/edit", element: <RecordFormPage mode="edit" /> },
       { path: "records/:id", element: <RecordDetailPage /> },
       { path: "notes", element: <NotesPage /> },
-      { path: "wizard", element: <RecordWizard /> },
-      { path: "jobs", element: <JobPage /> },
+      { path: "wizard", element: <Navigate to="/records/new/guided" replace /> },
+      { path: "jobs", element: <Navigate to="/records/export" replace /> },
+      { path: "collections", element: <SnapshotsPage /> },
+      { path: "snapshots", element: <Navigate to="/collections" replace /> },
       { path: "activity", element: <ActivityPage /> },
       { path: "settings", element: <SettingsPage /> },
       { path: "analytics", element: <AnalyticsPage /> },
-      { path: "snapshots", element: <SnapshotsPage /> },
     ],
   },
 ]);
