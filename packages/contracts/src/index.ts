@@ -230,7 +230,60 @@ export const snapshotSchema = z.object({
   name: z.string().min(1).max(80),
   revision: z.number().int().positive(),
   createdAt: z.string().datetime(),
+  environmentName: z.string().nullable(),
+  configDigest: z.string().nullable(),
+  codeVersion: z.string().nullable(),
   members: z.array(snapshotMemberSchema),
+});
+
+export const snapshotSummarySchema = z.object({
+  id: z.string().uuid(),
+  collectionId: z.string().uuid(),
+  name: z.string(),
+  revision: z.number().int().positive(),
+  createdAt: z.string().datetime(),
+});
+
+export const snapshotListSchema = z.object({
+  snapshots: z.array(snapshotSummarySchema),
+});
+
+export const diffRowSchema = z.object({
+  id: z.string(),
+  kind: z.enum(["added", "removed", "changed"]),
+  fields: z.array(z.string()),
+  leftTitle: z.string().nullable(),
+  rightTitle: z.string().nullable(),
+});
+
+export const provenanceRowSchema = z.object({
+  field: z.enum(["environmentName", "configDigest", "codeVersion"]),
+  left: z.string().nullable(),
+  right: z.string().nullable(),
+});
+
+export const snapshotDiffSchema = z.object({
+  baselineId: z.string().uuid(),
+  laterId: z.string().uuid(),
+  rows: z.array(diffRowSchema),
+  provenance: z.array(provenanceRowSchema),
+});
+
+export const windowDiffSchema = z.object({
+  left: z.object({ from: z.string().datetime(), to: z.string().datetime() }),
+  right: z.object({ from: z.string().datetime(), to: z.string().datetime() }),
+  timeZone: z.enum(["UTC", "Europe/Paris"]),
+  granularity: z.enum(["hour", "day"]),
+  rows: z.array(diffRowSchema),
+  leftCount: z.number().int().nonnegative(),
+  rightCount: z.number().int().nonnegative(),
+});
+
+export const bucketSchema = z.object({
+  at: z.string().datetime(),
+  timeZone: z.enum(["UTC", "Europe/Paris"]),
+  granularity: z.enum(["hour", "day"]),
+  label: z.string(),
 });
 
 export const coverageCountSchema = z.object({

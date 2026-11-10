@@ -31,6 +31,9 @@ export type PublishedSnapshot = {
   name: string;
   revision: number;
   createdAt: string;
+  environmentName: string | null;
+  configDigest: string | null;
+  codeVersion: string | null;
   members: SnapshotMember[];
 };
 
@@ -94,7 +97,16 @@ export async function readDraft(db: Db, userId: string, collectionId: string) {
 export async function publishSnapshot(
   db: Db,
   userId: string,
-  input: { collectionId: string; name: string; target?: string[]; submitKey?: string; recordIds?: string[] },
+  input: {
+    collectionId: string;
+    name: string;
+    target?: string[];
+    submitKey?: string;
+    recordIds?: string[];
+    environmentName?: string | null;
+    configDigest?: string | null;
+    codeVersion?: string | null;
+  },
 ): Promise<PublishedSnapshot> {
   await requireCuration(db, userId);
   const name = input.name.trim();
@@ -150,6 +162,9 @@ export async function publishSnapshot(
         name,
         revision,
         submitKey: input.submitKey ?? null,
+        environmentName: blankToNull(input.environmentName),
+        configDigest: blankToNull(input.configDigest),
+        codeVersion: blankToNull(input.codeVersion),
         createdAt: new Date(),
       })
       .returning();
@@ -176,6 +191,24 @@ export async function publishSnapshot(
   });
 }
 
+export async function listSnapshots(db: Db, userId: string, collectionId?: string) {
+  await requireRecordView(db, userId);
+  const filters = [eq(snapshot.userId, userId)];
+  if (collectionId) filters.push(eq(snapshot.collectionId, collectionId));
+  const rows = await db
+    .select({
+      id: snapshot.id,
+      collectionId: snapshot.collectionId,
+      name: snapshot.name,
+      revision: snapshot.revision,
+      createdAt: snapshot.createdAt,
+    })
+    .from(snapshot)
+    .where(and(...filters))
+    .orderBy(asc(snapshot.revision));
+  return rows.map((row) => ({ ...row, createdAt: row.createdAt.toISOString() }));
+}
+
 export async function readSnapshot(db: Db, userId: string, snapshotId: string): Promise<PublishedSnapshot> {
   await requireRecordView(db, userId);
   const rows = await db
@@ -196,6 +229,9 @@ export async function readSnapshot(db: Db, userId: string, snapshotId: string): 
     name: row.name,
     revision: row.revision,
     createdAt: row.createdAt.toISOString(),
+    environmentName: row.environmentName,
+    configDigest: row.configDigest,
+    codeVersion: row.codeVersion,
     members: members.map((member) => ({
       recordId: member.recordId,
       title: member.title,
@@ -272,6 +308,11 @@ async function categoriesFor(db: Db, userId: string, ids: string[]): Promise<Map
     categories.set(String(row.record_id), String(row.category));
   }
   return categories;
+}
+
+function blankToNull(value: string | null | undefined): string | null {
+  const trimmed = value?.trim() ?? "";
+  return trimmed.length > 0 ? trimmed : null;
 }
 
 function rowsOf(result: unknown): Record<string, unknown>[] {

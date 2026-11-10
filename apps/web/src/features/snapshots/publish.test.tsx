@@ -22,6 +22,7 @@ it("SNP-2 focuses the name field when publish name is empty", async () => {
     if (url.endsWith("/api/collections") && (!init || !init.method || init.method === "GET")) {
       return json({ collections: [{ id: collectionId, name: "Release", memberCount: 2 }] });
     }
+    if (url.includes("/api/snapshots?")) return json({ snapshots: [] });
     if (url.endsWith("/draft")) {
       return json({
         id: collectionId,
@@ -39,6 +40,9 @@ it("SNP-2 focuses the name field when publish name is empty", async () => {
         name: "Monday",
         revision: 1,
         createdAt: "2026-01-02T00:00:00.000Z",
+        environmentName: null,
+        configDigest: null,
+        codeVersion: null,
         members: [
           { recordId: "33333333-3333-4333-8333-333333333333", title: "Alpha title", status: "open", category: "alpha", sourceUpdatedAt: "2026-01-02T00:00:00.000Z" },
           { recordId: "44444444-4444-4444-8444-444444444444", title: "Gamma title", status: "open", category: "gamma", sourceUpdatedAt: "2026-01-02T00:00:00.000Z" },

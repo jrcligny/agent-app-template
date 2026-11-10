@@ -1,4 +1,4 @@
-import { coverageSchema, draftCollectionSchema, draftMemberSchema, snapshotSchema } from "@agent-app/contracts";
+import { coverageSchema, draftCollectionSchema, draftMemberSchema, snapshotListSchema, snapshotSchema } from "@agent-app/contracts";
 import type { Context, Hono } from "hono";
 import { z } from "zod";
 import { AccessDeniedError } from "../../access/record-access.js";
@@ -10,6 +10,7 @@ import {
   SnapshotNotFoundError,
   SnapshotValidationError,
   listDraftCollections,
+  listSnapshots,
   publishSnapshot,
   readCoverage,
   readDraft,
@@ -57,12 +58,29 @@ export function registerSnapshotRoutes(app: Hono, db: Db, auth: Auth): void {
         target: z.array(z.string().trim().min(1).max(80)).max(40).optional(),
         submitKey: z.string().uuid().optional(),
         recordIds: z.array(z.string().uuid()).max(100).optional(),
+        environmentName: z.string().trim().max(80).nullable().optional(),
+        configDigest: z.string().trim().max(120).nullable().optional(),
+        codeVersion: z.string().trim().max(80).nullable().optional(),
       })
       .safeParse(await readJson(c));
     if (!parsed.success) return errorJson(c, 400, "validation", "Enter a publish name.");
     try {
       const published = await publishSnapshot(db, user.id, parsed.data);
       return c.json(snapshotSchema.parse(published), 201);
+    } catch (error) {
+      return mapSnapshotError(c, error);
+    }
+  });
+
+  app.get("/api/snapshots", async (c) => {
+    const user = await requireUser(c, auth);
+    if (user instanceof Response) return user;
+    const collectionId = c.req.query("collectionId");
+    const parsed = collectionId ? z.string().uuid().safeParse(collectionId) : null;
+    if (parsed && !parsed.success) return errorJson(c, 400, "validation", "Choose a collection.");
+    try {
+      const snapshots = await listSnapshots(db, user.id, parsed?.data);
+      return c.json(snapshotListSchema.parse({ snapshots }));
     } catch (error) {
       return mapSnapshotError(c, error);
     }
