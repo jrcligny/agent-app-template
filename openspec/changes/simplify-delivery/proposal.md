@@ -8,7 +8,7 @@ The delivery chain still describes an in-process job scheduler and a demo that n
 
 - API and web images stay non-root. CI still builds them and does not push.
 - Compose still starts Postgres, one migrate step, the API, and the web app.
-- The scheduler replica lock and the in-process scheduler go away. Helm may run more than one API replica. It still does not add an autoscaler.
+- The scheduler replica lock and the in-process scheduler go away. Helm may run more than one API replica. Enabling autoscaling renders an autoscaler and does not fail the chart.
 - Checks, skill layout, English copy, spec coverage, and OpenSpec stay in CI.
 - Docs still build from the site. Storybook stays an uploaded artifact and is not published.
 
@@ -29,7 +29,7 @@ The delivery chain still describes an in-process job scheduler and a demo that n
 
 ## User journey
 
-A reviewer runs the same CI checks. The image job builds and does not push. Helm renders one API replica by default and also renders two replicas without a scheduler error. The docs site builds. Storybook is an artifact.
+A reviewer runs the same CI checks. The image job builds and does not push. Helm renders one API replica by default, renders two replicas without a scheduler error, and renders an autoscaler when autoscaling is enabled. The docs site builds. Storybook is an artifact.
 
 ## UI acceptance
 

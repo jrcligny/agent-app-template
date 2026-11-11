@@ -49,7 +49,9 @@ The implementation deletes those files and drops their coverage-map rows. This p
 
 No database change. Rollback keeps the current stories. No archive in the spec pull request.
 
-## Open Questions
+## Resolved decisions
 
-1. Should the data table, wizard frame, drawer, and confirm dialog be deleted instead of kept as stories?
-2. Should Storybook be published beside the docs site, or stay a CI artifact?
+The owner answered these on pull request 4. The answers are decisions for this text. `x-human-approval` stays `pending`.
+
+1. The data table, wizard frame, drawer, and confirm dialog stay as stories with sample data. They are not deleted and they do not call a record API.
+2. Storybook stays a CI artifact. The docs site does not publish it.

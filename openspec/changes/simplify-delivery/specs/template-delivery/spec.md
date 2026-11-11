@@ -16,13 +16,17 @@ The API and web images SHALL run as non-root. Compose SHALL start Postgres, a on
 Trace: .github/workflows/ci.yml :: "DEL-1 builds both images without pushing"
 
 ### Requirement: DEL-2 Helm does not guard a scheduler
-The chart SHALL NOT require a single API replica because of an in-process scheduler, and SHALL NOT render a HorizontalPodAutoscaler. The default replica count SHALL be 1. Setting replica count above 1 SHALL render.
+The chart SHALL NOT require a single API replica because of an in-process scheduler. The default replica count SHALL be 1. A replica count above 1 SHALL render. When autoscaling is enabled, the chart SHALL render a HorizontalPodAutoscaler and SHALL NOT fail.
 
 #### Scenario: Two replicas
 - **WHEN** replicaCount is 2
 - **THEN** the chart renders and does not fail for a scheduler
 
-Trace: scripts/check-helm-scheduler.mjs :: "DEL-2 allows two API replicas"
+#### Scenario: Autoscaling enabled
+- **WHEN** autoscaling is enabled
+- **THEN** the chart renders a HorizontalPodAutoscaler
+
+Trace: scripts/check-helm-scheduler.mjs :: "DEL-2 allows two API replicas and an autoscaler"
 
 ### Requirement: DEL-3 Checks stay in one place
 CI SHALL run architecture, skill layout, deploy policy, English copy, tests, OpenSpec, and spec coverage. Skills SHALL live only under `.agents/skills`.

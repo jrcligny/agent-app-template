@@ -20,8 +20,8 @@ See proposal.md. The current header lists six business sections. `document-exist
 
 ## Decisions
 
-- The signed-out view is the existing account form. Hello world is only for a session. This is a guess recorded in Open Questions.
-- The product name stays Workbench until the owner renames it.
+- The signed-out view is the existing account form. Hello world requires a session. The owner confirmed this on pull request 4. That reply does not set `x-human-approval`.
+- The product name stays Workbench. The owner confirmed this on pull request 4.
 - SHELL-1 stays. The header still must not show API status, and health probes stay.
 - No primary navigation list. Theme and account sit in the header.
 
@@ -34,8 +34,10 @@ See proposal.md. The current header lists six business sections. `document-exist
 
 No schema change in this increment. Rollback is to keep the old routes until `simplify-demo-product` is implemented. No archive in the spec pull request.
 
-## Open Questions
+## Resolved decisions
 
-1. Must Hello world require a session, or is the sentence public and sign-in optional?
-2. Should the product name stay Workbench?
-3. Should any account setting remain besides email and name on the session?
+The owner answered these on pull request 4. The answers are decisions for this text. `x-human-approval` stays `pending`.
+
+1. Hello world requires a session. A signed-out person sees the account form.
+2. The product name stays Workbench.
+3. Account settings stay limited to email and name. There is no settings page and no page-size setting.
