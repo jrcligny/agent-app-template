@@ -1,0 +1,6 @@
+schema: agent-app
+created: 2026-11-11
+x-ui: true
+x-human-approval: pending
+x-depends-on: add-evaluation-campaigns
+x-spec-revision: sha256:3164c206ab80b4e76826998395e8b3d4b8036b3a602933ba439a75aee3454116

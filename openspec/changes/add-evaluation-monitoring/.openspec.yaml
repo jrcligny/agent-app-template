@@ -1,0 +1,6 @@
+schema: agent-app
+created: 2026-11-11
+x-ui: true
+x-human-approval: pending
+x-depends-on: add-evaluation-baseline
+x-spec-revision: sha256:d8fde4f5ce5b867c598f2d6377a4eabbb224fb7145328daa764a80b6c23038ba

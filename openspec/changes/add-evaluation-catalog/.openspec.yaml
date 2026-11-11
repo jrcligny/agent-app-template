@@ -1,0 +1,5 @@
+schema: agent-app
+created: 2026-11-11
+x-ui: true
+x-human-approval: pending
+x-spec-revision: sha256:72faf7f4a090b9159d7e50c0c8fd476222344016b961d6320fba74ee9493beb3
