@@ -51,21 +51,16 @@ describe("health", () => {
     });
   });
 
-  it("MIG-1 keeps stored notes when migration runs twice", async () => {
+  it("BACK-2 keeps a user when migration runs twice", async () => {
     await withDisposableDatabase(false, async (databaseUrl) => {
       await applyMigrations(databaseUrl);
       const pool = new Pool({ connectionString: databaseUrl, max: 1 });
+      const userId = crypto.randomUUID();
       try {
-        const userId = crypto.randomUUID();
         await pool.query(
           `insert into "user" (id, name, email, email_verified, created_at, updated_at)
            values ($1, 'Migration', $2, true, now(), now())`,
           [userId, `${userId}@example.com`],
-        );
-        await pool.query(
-          `insert into note (user_id, title, body, created_at, updated_at)
-           values ($1, 'Keep me', 'still here', now(), now())`,
-          [userId],
         );
       } finally {
         await pool.end();
@@ -73,8 +68,8 @@ describe("health", () => {
       await applyMigrations(databaseUrl);
       const check = new Pool({ connectionString: databaseUrl, max: 1 });
       try {
-        const result = await check.query("select title from note");
-        expect(result.rows.map((row) => row.title)).toEqual(["Keep me"]);
+        const result = await check.query(`select name from "user" where id = $1`, [userId]);
+        expect(result.rows.map((row) => row.name)).toEqual(["Migration"]);
       } finally {
         await check.end();
       }

@@ -4,7 +4,7 @@ import type { Db } from "../../db/types.js";
 export async function databaseReady(db: Db): Promise<boolean> {
   try {
     await db.execute(sql`select 1`);
-    const result = await db.execute(sql`select to_regclass('public.note')::text as name`);
+    const result = await db.execute(sql`select to_regclass('public.user')::text as name`);
     const row = firstRow(result);
     return Boolean(row?.name);
   } catch {
