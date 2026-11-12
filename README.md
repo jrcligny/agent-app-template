@@ -1,6 +1,6 @@
 # agent-app-template
 
-Public template for internal applications. The sample is a signed-in note list: health, sessions, and owner-only notes against PostgreSQL. It does not include business data.
+Public template for internal applications. The sample is a signed-in Hello world page: health, sessions, and a theme control against PostgreSQL. It does not include business data.
 
 The template repository and its docs are public. Applications built from it are expected to stay internal.
 

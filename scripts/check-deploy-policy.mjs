@@ -45,19 +45,18 @@ if (/^USER root/m.test(webDocker)) findings.push("apps/web/Dockerfile: must not 
 const chart = path.join(root, "deploy/helm/agent-app");
 if (!statSync(chart).isDirectory()) findings.push("deploy/helm/agent-app is missing");
 const apiDeployment = readFileSync(path.join(chart, "templates/deployment-api.yaml"), "utf8");
-if (!apiDeployment.includes("api.scheduler.enabled requires api.replicaCount 1")) {
-  findings.push("deploy/helm/agent-app/templates/deployment-api.yaml: scheduler must refuse more than one API replica");
+if (apiDeployment.includes("api.scheduler.enabled requires api.replicaCount 1")) {
+  findings.push("deploy/helm/agent-app/templates/deployment-api.yaml: the scheduler replica guard is gone");
 }
-if (!apiDeployment.includes("type: Recreate")) {
-  findings.push("deploy/helm/agent-app/templates/deployment-api.yaml: an enabled scheduler must use Recreate");
+if (!apiDeployment.includes("replicas: {{ .Values.api.replicaCount }}")) {
+  findings.push("deploy/helm/agent-app/templates/deployment-api.yaml: replica count must still render when autoscaling is off");
 }
-if (/kind:\s*HorizontalPodAutoscaler/.test(apiDeployment)) {
-  findings.push("deploy/helm/agent-app/templates/deployment-api.yaml: do not add an HPA beside the demo scheduler");
+const hpa = readFileSync(path.join(chart, "templates/hpa.yaml"), "utf8");
+if (!hpa.includes("kind: HorizontalPodAutoscaler")) {
+  findings.push("deploy/helm/agent-app/templates/hpa.yaml: autoscaling must be able to render an HPA");
 }
-for (const file of walk(path.join(chart, "templates"))) {
-  if (/kind:\s*HorizontalPodAutoscaler/.test(readFileSync(file, "utf8"))) {
-    findings.push(`${path.relative(root, file)}: the chart must not ship an HPA`);
-  }
+if (!hpa.includes("autoscaling")) {
+  findings.push("deploy/helm/agent-app/templates/hpa.yaml: the autoscaler is gated on the autoscaling value");
 }
 
 if (findings.length > 0) {

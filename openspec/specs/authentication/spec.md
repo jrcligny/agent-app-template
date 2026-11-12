@@ -5,15 +5,6 @@ Gives each person a session cookie for their own account and rejects note access
 
 ## Requirements
 
-### Requirement: AUTH-1 Notes require a session
-The API SHALL reject note requests that do not include a session.
-
-#### Scenario: No cookie
-- **WHEN** a client requests GET /api/notes without a session cookie
-- **THEN** the response status is 401
-
-Trace: apps/api/src/features/notes/notes.integration.test.ts :: "AUTH-1 rejects notes without a session"
-
 ### Requirement: AUTH-2 Account summary omits secrets
 The account summary SHALL include only id, email, and name.
 
@@ -37,19 +28,19 @@ The session cookie SHALL be HttpOnly, SHALL NOT use SameSite=None, and SHALL NOT
 - **THEN** the response is not successful
 
 #### Scenario: Cookie without origin
-- **WHEN** a signed-in client sends a state-changing note request with a session cookie and no Origin
+- **WHEN** a signed-in client sends sign-out with a session cookie and no Origin
 - **THEN** the response status is 403
 
-Trace: apps/api/src/features/notes/notes.integration.test.ts :: "AUTH-3 sets an HttpOnly session cookie and rejects an untrusted or missing origin"
+Trace: apps/api/src/features/auth/auth.integration.test.ts :: "AUTH-3 sets an HttpOnly session cookie and rejects an untrusted or missing origin"
 
 ### Requirement: AUTH-4 Sign-out ends access
-After sign-out, the API SHALL reject note requests that reuse the previous session cookie.
+After sign-out, the API SHALL reject account requests that reuse the previous session cookie.
 
 #### Scenario: Signed out
-- **WHEN** a client signs out and then requests GET /api/notes with the previous cookie
+- **WHEN** a client signs out and then requests GET /api/me with the previous cookie
 - **THEN** the response status is 401
 
-Trace: apps/api/src/features/notes/notes.integration.test.ts :: "AUTH-4 rejects notes after sign-out"
+Trace: apps/api/src/features/auth/auth.integration.test.ts :: "AUTH-4 rejects the account summary after sign-out"
 
 ### Requirement: AUTH-5 Production configuration rejects insecure defaults
 In production the process SHALL refuse a public URL that is not https, a wildcard or loopback origin, a disabled secure cookie, a placeholder auth secret, or a local placeholder database password.

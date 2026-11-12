@@ -5,15 +5,6 @@ Applies database changes once, in order, and refuses SQL that would destroy exis
 
 ## Requirements
 
-### Requirement: MIG-1 Repeating migration keeps stored notes
-The migration command SHALL be safe to run again without deleting notes already stored.
-
-#### Scenario: Second run
-- **WHEN** a note exists and the migration command runs again
-- **THEN** that note is still stored
-
-Trace: apps/api/src/features/health/health.integration.test.ts :: "MIG-1 keeps stored notes when migration runs twice"
-
 ### Requirement: MIG-2 Destructive SQL is refused
 The migration command SHALL refuse SQL that drops tables, drops columns, or truncates data.
 

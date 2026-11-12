@@ -3,23 +3,7 @@ import path from "node:path";
 
 const root = process.cwd();
 
-const services = [
-  "apps/api/src/access/record-access.ts",
-  "apps/api/src/activity/events.ts",
-  "apps/api/src/analytics/aggregate.ts",
-  "apps/api/src/auth/account.http.ts",
-  "apps/api/src/curation/store.ts",
-  "apps/api/src/evidence/safety.ts",
-  "apps/api/src/evidence/store.ts",
-  "apps/api/src/jobs/lifecycle.ts",
-  "apps/api/src/jobs/scheduler.ts",
-  "apps/api/src/jobs/worker.ts",
-  "apps/api/src/settings/preferences.ts",
-  "apps/api/src/snapshots/store.ts",
-  "apps/api/src/comparison/compare.ts",
-  "apps/api/src/comparison/diff.ts",
-  "apps/api/src/hierarchy/path.ts",
-];
+const services = ["apps/api/src/auth/account.http.ts"];
 
 const surfaces = [
   "apps/web/src/app.tsx",

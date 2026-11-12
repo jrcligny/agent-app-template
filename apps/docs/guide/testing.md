@@ -1,26 +1,15 @@
 # Testing
 
-Tests follow behavior. There is no coverage percentage gate and no fixed test count. Authorization scenarios stay even if they add cases. A redundant test that only restates an implementation detail should not be added; say why if one is proposed.
+Tests follow behavior. There is no coverage percentage gate.
 
 | Check | What it proves |
 | --- | --- |
-| `env.test.ts` | Production origin, cookie, secret, and database password rules. Pure logic with many unsafe edges. |
+| `env.test.ts` | Production origin, cookie, secret, and database password rules. |
 | `migration-policy.test.ts` | Destructive SQL is rejected before a database is used. |
-| Health integration | Real Hono requests. Liveness without a schema. Readiness before and after migrate. A second migrate keeps a row. |
-| Notes integration | Real sign-up, HttpOnly cookie, untrusted origin, sign-out, owner list, cross-account 404, empty title. Disposable `slice_*` databases on localhost only. |
-| Records integration | Counts, forbidden list, filtered page, cross-account 404, closed-record validation, and atomic delete. Same disposable databases. |
-| Operations integration | Job cancel stops later success, retry creates one new attempt, activity is newest-first and owner-scoped, and a saved page size is what the next record list uses. |
-| Analytics integration | Fixture alpha totals, the Paris and UTC day buckets, a zero count versus a forbidden response, and a rejected window. |
-| Scheduler unit | A failed tick does not stop the loop, and stop waits so a later tick does not run. |
-| Workbench component tests | Dashboard counts, table selection, drawer focus, form validation, unsaved changes, and dismissed delete. |
-| Status component test | Shared loading, empty, error, success, and forbidden names. |
-| Evidence integration | Other-account artifact ids are not found, unsafe links store nothing, a deleted record hides the file, bytes stay immutable, and `canCurate: false` blocks the write. |
-| Snapshot integration | A published title stays after the source record is renamed or deleted. Another account receives 404. A session that cannot publish receives 403 and no new row. Coverage lists a missing category only when the target includes it. |
-| Section tree | Keyboard expands a nested section. Text is text. Loading, empty, and error statuses are named. |
-| Wizard progress | The progressbar value text matches the visible step sentence. Next follows Back and uses content width. |
-| Theme | An explicit light or dark choice is stored. System is the default and follows the preference. Contrast checks record the approved pairs and the cyan pairs that stay unused because they are below AA. |
-| Playwright | Account journey, validation focus, saved note, narrow viewport, second account, the workbench create and confirmed delete journey, wizard progress on a wide and a 375px viewport, and axe on those screens. | |
+| Health integration | Liveness without a session. Readiness before and after migrate. A second migrate keeps a user. |
+| Auth integration | Account summary omits secrets, the cookie is HttpOnly, a missing origin is forbidden, and sign-out ends access. |
+| Hello component test | The page says Hello world and an empty password keeps focus. |
+| Theme | A stored choice overrides the system default. |
+| Playwright | Sign-in, Hello world, theme, a 375px viewport, and axe. |
 
-Playwright saves screenshots when `ARTIFACTS_DIR` is set. Axe reports rule violations it can see. It does not certify the visual design. A human still reviews the UI.
-
-Integration tests are the red/green loop for request behavior. The bootstrap pull request landed tests with the slice because that was the authorized exception. Later implementation pull requests can show a failing test before the fix.
+Playwright saves screenshots when `ARTIFACTS_DIR` is set. Axe does not certify the visual design.

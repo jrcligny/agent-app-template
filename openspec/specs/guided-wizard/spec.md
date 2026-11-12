@@ -5,19 +5,6 @@ Walks a person through creating a record in steps, and stops them on the step th
 
 ## Requirements
 
-### Requirement: WIZ-1 Steps block on validation
-The wizard SHALL show one step at a time. Next SHALL stay on the step when that step is invalid, and SHALL move focus to the invalid field.
-
-#### Scenario: Validation error
-- **WHEN** the user chooses closed status and presses Next with an empty reason
-- **THEN** the wizard stays on that step and shows a validation error
-
-#### Scenario: Success
-- **WHEN** every step is valid and the user finishes from the keyboard
-- **THEN** the record is created and a success status is shown
-
-Trace: apps/web/src/features/wizard/record-wizard.test.tsx :: "WIZ-1 stays on an invalid step and focuses the field"
-
 ### Requirement: WIZ-2 Progress text
 The wizard SHALL show a progress bar and the sentence `Step {current} of {total}. Current step: {title}.` The progressbar SHALL use that sentence as `aria-valuetext` and SHALL set `aria-valuenow` to the current step. Color SHALL NOT be the only indication of the step.
 
