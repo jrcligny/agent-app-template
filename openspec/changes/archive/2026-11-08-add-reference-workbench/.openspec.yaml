@@ -1,0 +1,6 @@
+schema: agent-app
+created: 2026-11-07
+x-ui: true
+x-human-approval: pending
+x-depends-on: bootstrap-branch
+x-spec-revision: sha256:582858034806b38040b22ead7880e223cd77ca06c48ab9d158a88523587a70e4

@@ -1,0 +1,39 @@
+{
+  "name": "agent-app-template",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.33.4",
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @agent-app/contracts build && pnpm --parallel --filter @agent-app/api --filter @agent-app/web dev",
+    "build": "pnpm --filter @agent-app/contracts build && pnpm -r --filter !@agent-app/contracts --if-present run build",
+    "typecheck": "pnpm --filter @agent-app/contracts build && pnpm -r --filter !@agent-app/contracts --if-present run typecheck",
+    "lint": "eslint .",
+    "test": "pnpm --filter @agent-app/contracts build && pnpm -r --filter !@agent-app/e2e --if-present run test && node --test scripts/*.test.mjs",
+    "test:e2e": "pnpm --filter @agent-app/contracts build && pnpm --filter @agent-app/web build && pnpm --filter @agent-app/e2e test",
+    "check:architecture": "node scripts/check-import-boundaries.mjs",
+    "check:skills": "node scripts/check-skill-layout.mjs",
+    "openspec:skills": "openspec init --tools agents --profile core --no-copilot-cloud --force --no-animation",
+    "check:deploy": "node scripts/check-deploy-policy.mjs",
+    "check:specs": "node scripts/check-spec-workflow.mjs",
+    "check:spec-coverage": "node scripts/check-spec-coverage.mjs",
+    "check:english": "node scripts/check-english.mjs",
+    "check:pr": "node scripts/check-pr-metadata.mjs --self-test",
+    "openspec:validate": "openspec validate --all --strict --no-interactive",
+    "db:migrate": "pnpm --filter @agent-app/api migrate",
+    "check": "pnpm check:architecture && pnpm check:skills && pnpm check:deploy && pnpm check:pr && pnpm check:english && pnpm check:spec-coverage && pnpm typecheck && pnpm lint && pnpm test && pnpm openspec:validate && pnpm check:specs && pnpm build"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild"]
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@fission-ai/openspec": "1.16.1",
+    "eslint": "^10.14.0",
+    "globals": "^17.7.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "^8.72.1"
+  }
+}

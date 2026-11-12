@@ -1,0 +1,17 @@
+node_modules
+dist
+.vitepress/dist
+.vitepress/cache
+storybook-static
+test-results
+playwright-report
+blob-report
+e2e/screenshots
+apps/docs/generated
+coverage
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+.pnpm-store
+*.log

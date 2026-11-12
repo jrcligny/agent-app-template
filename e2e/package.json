@@ -1,0 +1,14 @@
+{
+  "name": "@agent-app/e2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.65.0",
+    "@types/pg": "^8.23.1",
+    "pg": "^8.23.1"
+  }
+}

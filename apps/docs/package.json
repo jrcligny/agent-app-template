@@ -1,0 +1,14 @@
+{
+  "name": "@agent-app/docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node ../../scripts/render-spec-docs.mjs && vitepress dev",
+    "build": "node ../../scripts/render-spec-docs.mjs && vitepress build",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vitepress": "^1.6.4"
+  }
+}

@@ -1,0 +1,44 @@
+schema: agent-app
+githubCopilot:
+  cloudAgent: false
+
+context: |
+  This is a public template for internal applications. Do not add real business data or secrets.
+  Stack: pnpm, TypeScript, Vite, React, Tailwind CSS v4, Hono, PostgreSQL, Drizzle, better-auth.
+  Contracts in packages/contracts are public transport schemas only.
+  Web must not import the API, database, or server auth code. Routes stay thin.
+  Future features use two pull requests. A spec pull request adds openspec/changes and does not archive.
+  An implementation pull request starts from the approved spec commit, tests first, and archives only after the code matches.
+  The author does not approve their own pull request. Human merge is required.
+  Review with the four lenses in .github/review. Those prompts are advisory. No review bot is configured.
+  Production cookies are secure and HttpOnly. Trusted origins are explicit. Migrations are forward-only and run once per release.
+
+rules:
+  proposal:
+    - Include a User journey section.
+    - Include UI acceptance when a person will see the change.
+    - State breaking changes, removals, and migration or write None.
+    - Do not treat an agent comment as approval.
+  specs:
+    - Use requirement ids such as NOTES-1 and at least one WHEN/THEN scenario.
+    - Keep each requirement description under 500 characters.
+    - For UI changes, include scenarios for loading, empty, error, success, validation, permission, keyboard, focus, and narrow layout.
+    - Add Trace lines that name the test file and test title.
+    - Use only ADDED, MODIFIED, REMOVED, and RENAMED delta sections.
+    - REMOVED requirements include Reason and Migration.
+  design:
+    - Keep dependency direction and rollback explicit when deploy or schema behavior changes.
+  tasks:
+    - Each task says how to verify it.
+    - Do not archive in a spec-only change.
+
+operations:
+  apply:
+    guidance:
+      - Implement from the approved spec revision. If acceptance criteria need to change, stop for a new spec pull request.
+      - Prefer an integration test that exercises HTTP and a disposable local database.
+      - Do not weaken authorization tests to reduce the test count.
+  archive:
+    guidance:
+      - Archive only after implementation is delivered and tasks are checked.
+      - Archiving updates the implemented baseline. It does not publish a release or deploy anything.

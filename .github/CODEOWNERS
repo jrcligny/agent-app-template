@@ -1,0 +1,8 @@
+# CODEOWNERS asks GitHub to request review from @jrcligny.
+# It does not require that review. A human admin must add a ruleset that
+# requires review from code owners. No ruleset is created by this file.
+# During bootstrap the ruleset list was empty, and branch protection was not
+# readable by the automation token. Re-check repository settings before relying
+# on review enforcement.
+
+* @jrcligny

@@ -1,0 +1,2 @@
+# Substrings that are English or proper names and may otherwise look non-English.
+# One substring per line. Lines starting with # are comments.
