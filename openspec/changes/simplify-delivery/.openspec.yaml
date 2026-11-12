@@ -1,0 +1,6 @@
+schema: agent-app
+created: 2026-11-11
+x-ui: false
+x-human-approval: pending
+x-depends-on: simplify-demo-product
+x-spec-revision: sha256:d2ec0908ee7118e592dc9913e0a2e5a83a24fa2283185b3633ea0fa398121864

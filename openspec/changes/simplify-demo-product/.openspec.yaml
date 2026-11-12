@@ -1,0 +1,6 @@
+schema: agent-app
+created: 2026-11-11
+x-ui: true
+x-human-approval: pending
+x-depends-on: simplify-hello-shell,simplify-storybook
+x-spec-revision: sha256:06617cf66377b8c961d45de99a949cd04da872337e40e9b7bcd54de961acb6d4
