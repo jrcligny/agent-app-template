@@ -8,7 +8,7 @@ const meta = {
     open: true,
     title: "Alpha",
     onClose: () => undefined,
-    children: "Short summary of the record.",
+    children: "Sample detail. This story does not load a record.",
   },
 } satisfies Meta<typeof Drawer>;
 

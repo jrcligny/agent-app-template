@@ -17,7 +17,7 @@ export const SaveAndCancel: Story = {
     children: (
       <>
         <Button variant="quiet">Cancel</Button>
-        <Button>Save record</Button>
+        <Button>Save sample</Button>
       </>
     ),
   },

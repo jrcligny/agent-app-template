@@ -53,7 +53,7 @@ export function DataTable({
       <div className="flex flex-wrap items-end gap-3">
         <div className="grid min-w-48 flex-1 gap-1.5">
           <label htmlFor="record-search" className="text-sm font-medium">
-            Search records
+            Search
           </label>
           <input
             id="record-search"
@@ -86,7 +86,7 @@ export function DataTable({
       {canDelete ? (
         <ActionRow label="Table actions">
           <Button variant="danger" disabled={selectedCount === 0} onClick={onBulkDelete}>
-            Delete {selectedCount} records
+            Remove {selectedCount} samples
           </Button>
         </ActionRow>
       ) : null}
@@ -94,7 +94,7 @@ export function DataTable({
       {rows.length > 0 ? (
         <div className="overflow-x-auto rounded-lg border border-line bg-surface">
           <table className="w-full border-collapse text-left text-sm">
-            <caption className="sr-only">Records you can read</caption>
+            <caption className="sr-only">Sample rows</caption>
             <thead>
               <tr className="border-b border-line">
                 <th className="p-3 font-medium" scope="col">

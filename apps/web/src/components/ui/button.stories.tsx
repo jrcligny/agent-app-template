@@ -7,7 +7,7 @@ const meta = {
   parameters: {
     docs: {
       description: {
-        component: "Requirement UI-1 and ACT-1. See openspec/specs/action-controls/spec.md and the pending shared-controls spec.",
+        component: "Requirements UI-1 and ACT-1 Buttons stay content width. See openspec/specs/action-controls/spec.md.",
       },
     },
   },
@@ -16,6 +16,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Primary: Story = { args: { children: "Add note", variant: "primary" } };
+export const Primary: Story = { args: { children: "Save", variant: "primary" } };
 export const Quiet: Story = { args: { children: "Sign out", variant: "quiet" } };
-export const Danger: Story = { args: { children: "Delete note", variant: "danger" } };
+export const Danger: Story = { args: { children: "Remove sample", variant: "danger" } };

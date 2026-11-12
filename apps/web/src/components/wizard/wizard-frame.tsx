@@ -24,9 +24,9 @@ export function WizardFrame({
   return (
     <section className="grid gap-6" aria-labelledby="wizard-heading">
       <nav aria-label="Breadcrumb" className="text-sm">
-        <a href="/records">Records</a>
+        <a href="#sample">Example</a>
         <span aria-hidden="true"> / </span>
-        <span>New record</span>
+        <span>Sample</span>
       </nav>
       <div className="grid gap-2">
         <p id="wizard-progress-label" className="text-sm text-muted">

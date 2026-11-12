@@ -6,9 +6,9 @@ const meta = {
   component: ConfirmDialog,
   args: {
     open: true,
-    title: "Delete 2 records?",
-    description: "If any record in the set cannot be deleted, none of them are deleted.",
-    confirmLabel: "Delete 2 records",
+    title: "Remove 2 samples?",
+    description: "This sample dialog does not call an API.",
+    confirmLabel: "Remove 2 samples",
     onConfirm: () => undefined,
     onDismiss: () => undefined,
   },

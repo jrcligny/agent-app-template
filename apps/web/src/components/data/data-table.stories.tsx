@@ -32,7 +32,7 @@ function StoryTable({ rows: initial = rows }: { rows?: DataTableRow[] }) {
       onPageChange={() => undefined}
       onOpen={() => undefined}
       onBulkDelete={() => undefined}
-      emptyTitle="No records match"
+      emptyTitle="No samples match"
       emptyDetail="Try a different search."
     />
   );
