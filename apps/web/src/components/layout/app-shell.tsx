@@ -22,7 +22,7 @@ export function AppShell({
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-lg font-semibold">Workbench</p>
-            <p className="text-sm text-muted">Synthetic records for people with an account.</p>
+            <p className="text-sm text-muted">A signed-in starting point.</p>
           </div>
           <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 text-sm">
             {nav}

@@ -5,8 +5,8 @@ import { AppShell } from "./app-shell";
 it("header does not show API status", () => {
   cleanup();
   render(
-    <AppShell nav={<a href="/records">Records</a>} account={<p>ada@example.com</p>}>
-      <h1>Dashboard</h1>
+    <AppShell account={<p>ada@example.com</p>}>
+      <h1>Hello world</h1>
     </AppShell>,
   );
   expect(screen.getByText("Workbench")).toBeTruthy();

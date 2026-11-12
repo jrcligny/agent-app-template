@@ -18,6 +18,16 @@ export function AuthPanel() {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
+    if (email.trim().length === 0) {
+      document.getElementById("email")?.focus();
+      setError("Enter an email.");
+      return;
+    }
+    if (password.trim().length === 0) {
+      document.getElementById("password")?.focus();
+      setError("Enter a password.");
+      return;
+    }
     setPending(true);
     const result =
       mode === "sign-up"
